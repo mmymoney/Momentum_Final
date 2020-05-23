@@ -33,9 +33,6 @@
         </div>
     </div>
 
-    <!-- Tableau container -->
-    <div id="vizContainer" style = "width: 1600px; margin: auto; height: 1200px" ></div>
-
     <div class="container body-content">
         {% block content %}{% endblock %}
         <hr />
@@ -48,6 +45,7 @@
     <script src="/static/scripts/bootstrap.js"></script>
     <script src="/static/scripts/respond.js"></script>
     {% block scripts %}{% endblock %}
-
+    <!-- Tableau container -->
+    <div id="vizContainer" style = "width: 1600px; margin: auto; height: 1200px" ></div>
 </body>
 </html>
