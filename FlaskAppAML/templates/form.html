@@ -1,7 +1,8 @@
 ﻿{% extends "layout.html" %}
 
 {% block content %}
-<h2>Determine the T+1 close price based on features of SPY at time T</h2>
+<h2>Determine the T+1 close price based on features of SPY at time T!</h2>
+<p><h3>Default values are for May 7, 2020</h3></p><hr>
 <form method=post>
     <dl>
         <p>
@@ -86,7 +87,7 @@
         </p>
         <p>
             <h3>Prior Day Derivative</h3> 
-            What was the derivative of the priod day vertical delta ratio (-sin(x))?<br /><br />
+            What was the derivative of the prior day vertical delta ratio (-sin(x))?<br /><br />
             {{form.Prior_Day_Derivative}}
         </p>
     </dl>
