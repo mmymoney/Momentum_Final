@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/837f246d-87a2-468a-9b90-fd6c5355ff2b/resourceGroups/Resource_Group_1/providers/Microsoft.Web/sites/MomentumFinal",
+    "appService.deploySubpath": ""
+}
