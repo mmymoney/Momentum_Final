@@ -186,7 +186,7 @@ def do_something_pretty(jsondata):
     # Build a placeholder for the cluster#,distance values
     #repstr = '<tr><td>%d</td><td>%s</td></tr>' * (valuelen-1)
     # print(repstr)
-    output_bayesian=f'Our Bayesian linear regression model would predict a value of {str((float(scored_label)*294.433746) + 43.90625)}'
+    output_bayesian=f'Our linear regression model would predict a value of {str((float(scored_label)*294.433746) + 43.90625)}'
     # Build the entire html table for the results data representation
     #tablestr = 'Cluster assignment: %s<br><br><table border="1"><tr><th>Cluster</th><th>Distance From Center</th></tr>'+ repstr + "</table>"
     #return tablestr % data
