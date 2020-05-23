@@ -138,7 +138,7 @@ def about():
     """Renders the about page."""
     return render_template(
         'about.html',
-        title='About',
+        title='Tools',
         year=datetime.now().year,
         message='Your application description page.'
     )
