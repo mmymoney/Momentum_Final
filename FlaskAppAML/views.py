@@ -11,6 +11,13 @@ from FlaskAppAML import app
 
 from FlaskAppAML.forms import SubmissionForm
 
+# additional dependencies for API call to Rapid API (Yahoo Finance)
+import requests
+
+import math
+
+
+
 Bayesian_ML_KEY=os.environ.get('API_KEY', "6LgM3hobpFQkecNPOBz2QRHvSIzYJLdQBfahZtC49sPMjiOwIiNMAAtALXDNuZK1zE3DTzsKoJB4yvfZkSmDTQ==")
 Bayesian_URL = os.environ.get('URL', "https://ussouthcentral.services.azureml.net/workspaces/1ebda07f5b83468fa934325b157c5759/services/00d11b98f56946f286a640541b35f9ec/execute?api-version=2.0&details=true")
 # Deployment environment variables defined on Azure (pull in with os.environ)
@@ -27,6 +34,44 @@ def home():
     """Renders the home page which is the CNS of the web app currently, nothing pretty."""
 
     form = SubmissionForm(request.form)
+
+    #timestamp conversion from user-submitted date
+    timestamp_t = str(int(datetime.strptime(form.Date.data , '%Y-%m-%d').timestamp()))
+    timestamp_priordays = str(int(timestamp_t)-(86400*7))
+
+    #variables for call
+    url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-historical-data"
+
+    querystring = {"frequency":"1d","filter":"history","period1":timestamp_priordays,"period2":timestamp_t,"symbol":"SPY"}
+
+    headers = {
+        'x-rapidapi-host': "apidojo-yahoo-finance-v1.p.rapidapi.com",
+        'x-rapidapi-key': "ca07005c56mshafe5b7a7c516a9dp1b90e2jsn1e7c85e6edd1"
+        }
+
+    response = requests.request("GET", url, headers=headers, params=querystring)
+
+    #convert response variable to json format for slicing / variable assignment
+    response_json = response.json()
+
+    #feature set variables
+    open_t = response_json['prices'][0]['open']
+    high_t =  response_json['prices'][0]['high']
+    low_t =  response_json['prices'][0]['low']
+    close_t =  response_json['prices'][0]['close']
+    volume_t =  response_json['prices'][0]['volume']
+    t_3_volumediff =   response_json['prices'][3]['volume'] - response_json['prices'][0]['volume']
+    t_3_closediff =    response_json['prices'][3]['close'] - response_json['prices'][0]['close']
+    t_3_opendiff =    response_json['prices'][3]['open'] - response_json['prices'][0]['open']
+    t_2_volumediff = response_json['prices'][2]['volume'] - response_json['prices'][0]['volume']
+    t_2_closediff = response_json['prices'][2]['close'] - response_json['prices'][0]['close']
+    t_2_opendiff = response_json['prices'][2]['open'] - response_json['prices'][0]['open']
+    t_1_volumediff = response_json['prices'][1]['volume'] - response_json['prices'][0]['volume']
+    t_1_closediff = response_json['prices'][1]['close'] - response_json['prices'][0]['close']
+    t_1_opendiff = response_json['prices'][1]['open'] - response_json['prices'][0]['open']
+    pd_vert_delt = (response_json['prices'][0]['high']-response_json['prices'][0]['low'])/(response_json['prices'][1]['high']-response_json['prices'][1]['low'])
+    retracement_sig = (1-(high_t - close_t)/(high_t-low_t))
+    pd_deriv = -1*math.sin((close_t-open_t)/(response_json['prices'][1]['close']-response_json['prices'][1]['open']))
 
     # Form has been submitted
     if request.method == 'POST' and form.validate():
@@ -59,24 +104,42 @@ def home():
       ],
       "Values": [
         [
-          form.Open.data,
-          form.High.data,
-          form.Low.data,
-          form.Close.data,
-          form.Volume.data,
-          form.T3_Vol_Diff.data,
-          form.T3_Close_Diff.data,
-          form.T3_Open_Diff.data,
-          form.T2_Vol_Diff.data,
-          form.T2_Close_Diff.data,
-          form.T2_Open_Diff.data,
-          form.T1_Vol_Diff.data,
-          form.T1_Close_Diff.data,
-          form.T1_Open_Diff.data,
-          form.Prior_Day_Vert_Delta_Ratio.data,
-          form.Retracement_Signal.data,
-          form.Prior_Day_Derivative.data,
-          ""
+            open_t,
+            high_t,
+            low_t,
+            close_t,
+            volume_t,
+            t_3_volumediff,
+            t_3_closediff,
+            t_3_opendiff,
+            t_2_volumediff,
+            t_2_closediff,
+            t_2_opendiff,
+            t_1_volumediff,
+            t_1_closediff,
+            t_1_opendiff,
+            pd_vert_delt,
+            retracement_sig,
+            pd_deriv,
+            ""
+        #   form.Open.data,
+        #   form.High.data,
+        #   form.Low.data,
+        #   form.Close.data,
+        #   form.Volume.data,
+        #   form.T3_Vol_Diff.data,
+        #   form.T3_Close_Diff.data,
+        #   form.T3_Open_Diff.data,
+        #   form.T2_Vol_Diff.data,
+        #   form.T2_Close_Diff.data,
+        #   form.T2_Open_Diff.data,
+        #   form.T1_Vol_Diff.data,
+        #   form.T1_Close_Diff.data,
+        #   form.T1_Open_Diff.data,
+        #   form.Prior_Day_Vert_Delta_Ratio.data,
+        #   form.Retracement_Signal.data,
+        #   form.Prior_Day_Derivative.data,
+        #   ""
         ]
       ]
     }
@@ -119,7 +182,7 @@ def home():
         'form.html',
         form=form,
         title='Run App',
-        year=datetime.now().year,
+        year="2020",
         message='Demonstrating a website using Azure ML Api')
 
 
@@ -129,7 +192,7 @@ def contact():
     return render_template(
         'contact.html',
         title='Contact',
-        year=datetime.now().year,
+        year="2020",
         message='Your contact page.'
     )
 
@@ -149,7 +212,7 @@ def lstm2():
     return render_template(
         'lstm2.html',
         title='LSTM',
-        year=datetime.now().year,
+        year="2020",
         message='Your LSTM page.'
     )
 
@@ -159,7 +222,7 @@ def tableau():
     return render_template(
         'tableau.html',
         title='Market Data',
-        year=datetime.now().year,
+        year="2020",
         message='Your market data page.'
     )
 
