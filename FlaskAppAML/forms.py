@@ -3,10 +3,11 @@ from wtforms import Form, StringField, TextAreaField, validators
 # from flask_wtf import Form
 # from wtforms.fields import DateField
 # from flask_bootstrap import Bootstrap
+from datetime import datetime
 
 class SubmissionForm(Form):
     # Date = DateField(id='datepick',default="2020-05-27")
-    Date = StringField('Title', [validators.Length(min=0, max=30)],default = "2020-05-27")
+    Date = StringField('Title', [validators.Length(min=0, max=30)],default = datetime.today().strftime('%Y-%m-%d'))
     # Open = StringField('Title', [validators.Length(min=0, max=30)],default = 287.75)
     # High = StringField('Title', [validators.Length(min=0, max=30)], default = 289.779999)
     # Low = StringField('Title', [validators.Length(min=0, max=30)],default = 287.130005)
