@@ -165,7 +165,7 @@ def home():
             # result = json.dumps(result, indent=4, sort_keys=True)
             return render_template(
                 'result.html',
-                title="This is the result from AzureML running our example T+1 Prediction:",
+                title="This is the result from AzureML running our T+1 Prediction:",
                 result=result)
 
         # An HTTP error
