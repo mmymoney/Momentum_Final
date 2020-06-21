@@ -4,6 +4,8 @@ Routes and views for the flask application.
 import json
 import urllib.request
 import os
+import pandas as pd
+from sqlalchemy import create_engine
 
 from datetime import datetime
 from flask import render_template, request, redirect
@@ -31,11 +33,56 @@ HEADERS = {'Content-Type':'application/json', 'Authorization':('Bearer '+ Bayesi
 @app.route('/home', methods=['GET', 'POST'])
 def home():
     """Renders the home page which is the CNS of the web app currently, nothing pretty."""
+    
+    # Configuration for RDS instance
+    mode="append"
+    jdbc_url = "jdbc:postgresql://momentum-db.cgk0xpvhfuev.us-east-2.rds.amazonaws.com:5432/postgres"
+    config = {"user":"root",
+    "password": "rootroot",
+    "driver":"org.postgresql.Driver"}
+
+
+
 
     form = SubmissionForm(request.form)
 
+#variable formation based on questionnaire submissions
+    age = form.age.data
+    email = form.email.data
+    income_level = form.income_level.data
+    sector_preference = form.sector_preference.data
+    citizenship = form.citizenship.data
+    education = form.education.data
+    experience_years = form.experience_years.data
+    periodicals = form.periodicals.data
+    aspirations = form.aspirations.data
+    diversification = form.diversification.data
+    brokerage_acct = form.brokerage_acct.data
+    interested_in_learning = form.interested_in_learning.data
+    scenario_1 = form.scenario_1.data
+    scenario_2 = form.scenario_2.data
+    port_diversified = form.port_diversified.data
+    safest_asset = form.safest_asset.data
+    income_drawing = form.income_drawing.data
+    fin_info = form.fin_info.data
+    return_expectations = form.return_expectations.data
+    normal_expectations = form.normal_expectations.data
+    poor_expectations = form.poor_expectations.data
+    three_yr_attitude = form.three_yr_attitude.data
+    three_month_attitude = form.three_yr_attitude.data
 
-    age_bracket = form.Age.data
+#form dataframe from submission data
+    d = {'age': age, 'email': email, 'income_level': income_level, 'sector_preference': sector_preference, 'citizenship': citizenship, 'education': education, 'experience_years': experience_years, 'periodicals': periodicals, 'aspirations': aspirations, 'diversification': diversification, 'brokerage_acct': brokerage_acct, 'interested_in_learning': interested_in_learning, 'scenario_1': scenario_1, 'scenario_2': scenario_2, 'port_diversified': port_diversified, 'safest_asset': safest_asset, 'income_drawing': income_drawing, 'fin_info': fin_info, 'return_expectations': return_expectations, 'normal_expectations':normal_expectations, 'poor_expectations': poor_expectations, 'three_yr_attitude': three_yr_attitude, 'three_month_attitude': three_month_attitude}
+    submission_df = pd.DataFrame(data = d, index = None)
+
+    # from sqlalchemy import create_engine
+    engine = create_engine('postgresql://root:rootroot@momentum-db.cgk0xpvhfuev.us-east-2.rds.amazonaws.com:5432/postgres')
+
+    #use pandas to load questionnaire df into database
+    submission_df.to_sql(name = 'questionnaire', con = engine, if_exists = 'append')
+    # #query tables to validate load
+    # pd.read_sql_query('select * from questionnaire', con=engine).head()
+
     # #timestamp conversion from user-submitted date
     # timestamp_t = str(int(datetime.strptime(form.Date.data , '%Y-%m-%d').timestamp())+86400)
     # timestamp_priordays = str(int(timestamp_t)-(86400*7))

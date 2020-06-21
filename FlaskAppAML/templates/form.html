@@ -7,7 +7,7 @@
 <form method=post>
     <ul style="list-style: none;">
         <p>
-            <h3>About You</h3> <br>
+            <h3><strong>About You </strong></h3> <br>
           <!-- For what date (T) would you like to predict the following day's close price?<br/><br />
           <br>  -->
           E-mail Address:<br>
@@ -34,10 +34,10 @@
             <br>
         Please select the following you are a subscriber of? <br>
             {{form.periodicals}}
-            <br>
+            <br><br>
         What do you hope to achieve with your investments? <br>
-            {{form.aspiration}}
-            <br>
+            {{form.aspirations}}
+            <br><br>
         Do you have or have you had a brokerage account? <br>
             {{form.brokerage_acct}}
             <br>
@@ -48,25 +48,44 @@
             {{form.fin_info}}
             <br><br>    
 
-           <b> <h4>Technical Assessment</h4></b>
+           <b> <h4><strong>Technical Assessment</strong></h4></b>
             <br>
         Scenario 1: If a publicly traded company 
         files for Chapter 11 Bankruptcy, in which position would it be preferrable to be in? <br>
-            {{form.hertz_scenario}}
+            {{form.scenario_1}}
             <br>
         Scenario 2: If you own a put option, do you wish for the underlying asset to rise or fall before the given expiration date? <br>
-            {{form.put_option}}
+            {{form.scenario_2}}
             <br>
         Which one of these would you consider the safest asset to hold?<br>
             {{form.safest_asset}}
             <br>
         If the bond prices rise to be sold at a premium, would you expect your interest rate on those bonds to be higher or lower than they were before?<br>
-            {{form.bonds}}
+            {{form.bond_prices}}
             <br>
         Would you consider the following portfolio below to be well diversfied: 30% technology sector stock holdings 20% financial sector stock holdings 50% cryptocurrency?<br>
-            {{form.diversification}}
+            {{form.port_diversified}}
             <br><br>
-
+            <b> <h4><strong>Risk Profile</strong> </h4></b>
+            <br>
+        When do you expect to start drawing income? <br>
+            {{form.income_drawing}}
+            <br>
+        What is your expectation for return on this investment? <br>
+            {{form.return_expectations}}
+            <br>
+            Assuming normal market conditions, what would you expect from this investment over time?<br>
+            {{form.normal_expectations}}
+            <br>
+            If your investments were to perform poorly over the next decade, what would you expect?<br>
+            {{form.poor_expectations}}
+            <br>
+            Which of these statements describes your attitude about the next three year's performance of this money?<br>
+            {{form.three_yr_attitude}}
+            <br>
+            Which of these statements describe your attitude about the next few (3) months' performance of this money?<br>
+            {{form.three_month_attitude}}
+            <br><br>
         </p>
     </ul>
     <p><input type="submit" value="submit"</p>
