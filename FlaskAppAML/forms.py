@@ -1,4 +1,4 @@
-from wtforms import Form, StringField, TextAreaField, validators
+from wtforms import Form, StringField, TextAreaField, validators, RadioField
 # from flask import Flask, render_template
 # from flask_wtf import Form
 # from wtforms.fields import DateField
@@ -7,7 +7,7 @@ from datetime import datetime
 
 class SubmissionForm(Form):
     # Date = DateField(id='datepick',default="2020-05-27")
-    Date = StringField('Title', [validators.Length(min=0, max=30)],default = "2020-05-27")
+    Age = RadioField('Title', coerce=int, choices=[('5','Less than 45'),('4','45 to 55'),('3','56 to 65'), ('2','66 to 75'), ('1','75 or older')])
     # Open = StringField('Title', [validators.Length(min=0, max=30)],default = 287.75)
     # High = StringField('Title', [validators.Length(min=0, max=30)], default = 289.779999)
     # Low = StringField('Title', [validators.Length(min=0, max=30)],default = 287.130005)

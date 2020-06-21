@@ -35,43 +35,45 @@ def home():
 
     form = SubmissionForm(request.form)
 
-    #timestamp conversion from user-submitted date
-    timestamp_t = str(int(datetime.strptime(form.Date.data , '%Y-%m-%d').timestamp())+86400)
-    timestamp_priordays = str(int(timestamp_t)-(86400*7))
 
-    #variables for call
-    url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-historical-data"
+    age_bracket = form.Age.data
+    # #timestamp conversion from user-submitted date
+    # timestamp_t = str(int(datetime.strptime(form.Date.data , '%Y-%m-%d').timestamp())+86400)
+    # timestamp_priordays = str(int(timestamp_t)-(86400*7))
 
-    querystring = {"frequency":"1d","filter":"history","period1":timestamp_priordays,"period2":timestamp_t,"symbol":"SPY"}
+    # #variables for call
+    # url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-historical-data"
 
-    headers = {
-        'x-rapidapi-host': "apidojo-yahoo-finance-v1.p.rapidapi.com",
-        'x-rapidapi-key': "ca07005c56mshafe5b7a7c516a9dp1b90e2jsn1e7c85e6edd1"
-        }
+    # querystring = {"frequency":"1d","filter":"history","period1":timestamp_priordays,"period2":timestamp_t,"symbol":"SPY"}
 
-    response = requests.request("GET", url, headers=headers, params=querystring)
+    # headers = {
+    #     'x-rapidapi-host': "apidojo-yahoo-finance-v1.p.rapidapi.com",
+    #     'x-rapidapi-key': "ca07005c56mshafe5b7a7c516a9dp1b90e2jsn1e7c85e6edd1"
+    #     }
 
-    #convert response variable to json format for slicing / variable assignment
-    response_json = response.json()
+    # response = requests.request("GET", url, headers=headers, params=querystring)
 
-    #feature set variables
-    open_t = response_json['prices'][0]['open']
-    high_t =  response_json['prices'][0]['high']
-    low_t =  response_json['prices'][0]['low']
-    close_t =  response_json['prices'][0]['close']
-    volume_t =  response_json['prices'][0]['volume']
-    t_3_volumediff =   response_json['prices'][3]['volume'] - response_json['prices'][0]['volume']
-    t_3_closediff =    response_json['prices'][3]['close'] - response_json['prices'][0]['close']
-    t_3_opendiff =    response_json['prices'][3]['open'] - response_json['prices'][0]['open']
-    t_2_volumediff = response_json['prices'][2]['volume'] - response_json['prices'][0]['volume']
-    t_2_closediff = response_json['prices'][2]['close'] - response_json['prices'][0]['close']
-    t_2_opendiff = response_json['prices'][2]['open'] - response_json['prices'][0]['open']
-    t_1_volumediff = response_json['prices'][1]['volume'] - response_json['prices'][0]['volume']
-    t_1_closediff = response_json['prices'][1]['close'] - response_json['prices'][0]['close']
-    t_1_opendiff = response_json['prices'][1]['open'] - response_json['prices'][0]['open']
-    pd_vert_delt = (response_json['prices'][0]['high']-response_json['prices'][0]['low'])/(response_json['prices'][1]['high']-response_json['prices'][1]['low'])
-    retracement_sig = (1-(high_t - close_t)/(high_t-low_t))
-    pd_deriv = -1*math.sin((close_t-open_t)/(response_json['prices'][1]['close']-response_json['prices'][1]['open']))
+    # #convert response variable to json format for slicing / variable assignment
+    # response_json = response.json()
+
+    # # feature set variables
+    # open_t = response_json['prices'][0]['open']
+    # high_t =  response_json['prices'][0]['high']
+    # low_t =  response_json['prices'][0]['low']
+    # close_t =  response_json['prices'][0]['close']
+    # volume_t =  response_json['prices'][0]['volume']
+    # t_3_volumediff =   response_json['prices'][3]['volume'] - response_json['prices'][0]['volume']
+    # t_3_closediff =    response_json['prices'][3]['close'] - response_json['prices'][0]['close']
+    # t_3_opendiff =    response_json['prices'][3]['open'] - response_json['prices'][0]['open']
+    # t_2_volumediff = response_json['prices'][2]['volume'] - response_json['prices'][0]['volume']
+    # t_2_closediff = response_json['prices'][2]['close'] - response_json['prices'][0]['close']
+    # t_2_opendiff = response_json['prices'][2]['open'] - response_json['prices'][0]['open']
+    # t_1_volumediff = response_json['prices'][1]['volume'] - response_json['prices'][0]['volume']
+    # t_1_closediff = response_json['prices'][1]['close'] - response_json['prices'][0]['close']
+    # t_1_opendiff = response_json['prices'][1]['open'] - response_json['prices'][0]['open']
+    # pd_vert_delt = (response_json['prices'][0]['high']-response_json['prices'][0]['low'])/(response_json['prices'][1]['high']-response_json['prices'][1]['low'])
+    # retracement_sig = (1-(high_t - close_t)/(high_t-low_t))
+    # pd_deriv = -1*math.sin((close_t-open_t)/(response_json['prices'][1]['close']-response_json['prices'][1]['open']))
 
     # Form has been submitted
     if request.method == 'POST' and form.validate():
@@ -225,6 +227,7 @@ def tableau():
         year="2020",
         message='Your market data page.'
     )
+
 
 def do_something_pretty(jsondata):
     
