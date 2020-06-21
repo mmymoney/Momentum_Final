@@ -70,11 +70,32 @@ def home():
     poor_expectations = form.poor_expectations.data
     three_yr_attitude = form.three_yr_attitude.data
     three_month_attitude = form.three_yr_attitude.data
+    
 
 #form dataframe from submission data
-    d = {'age': age, 'email': email, 'income_level': income_level, 'sector_preference': sector_preference, 'citizenship': citizenship, 'education': education, 'experience_years': experience_years, 'periodicals': periodicals, 'aspirations': aspirations, 'diversification': diversification, 'brokerage_acct': brokerage_acct, 'interested_in_learning': interested_in_learning, 'scenario_1': scenario_1, 'scenario_2': scenario_2, 'port_diversified': port_diversified, 'safest_asset': safest_asset, 'income_drawing': income_drawing, 'fin_info': fin_info, 'return_expectations': return_expectations, 'normal_expectations':normal_expectations, 'poor_expectations': poor_expectations, 'three_yr_attitude': three_yr_attitude, 'three_month_attitude': three_month_attitude}
-    submission_df = pd.DataFrame(data = d, index = None)
+    d = {'age': age, 'email': email, 'income_level': income_level, 'sector_preference': sector_preference, 
+    'citizenship': citizenship, 'education': education, 'experience_years': experience_years, 'periodicals': periodicals, 
+    'aspirations': aspirations, 'diversification': diversification, 'brokerage_acct': brokerage_acct, 
+    'interested_in_learning': interested_in_learning, 'scenario_1': scenario_1, 'scenario_2': scenario_2, 
+    'port_diversified': port_diversified, 'safest_asset': safest_asset, 'income_drawing': income_drawing, 
+    'fin_info': fin_info, 'return_expectations': return_expectations, 'normal_expectations':normal_expectations, 
+    'poor_expectations': poor_expectations, 'three_yr_attitude': three_yr_attitude, 
+    'three_month_attitude': three_month_attitude}
 
+    submission_df = pd.DataFrame(data = d, index = None)
+    # -------------------------------------------------------------------------------------------
+    #summed column -jsean
+    submission_df['sum'] = submission_df.sum(axis=1)
+    #Return summed value as string - JOANA 
+    current_user_agg = submission_df.loc[submission_df['email'] == email,'sum'].item()
+
+    #lower end = safer | higher = appetite
+    def chosen_etfs(user_agg):
+        if user_agg <= value and sector_preference == 'Financial Sector':
+            return # 
+
+
+    # -------------------------------------------------------------------------------------------
     # from sqlalchemy import create_engine
     engine = create_engine('postgresql://root:rootroot@momentum-db.cgk0xpvhfuev.us-east-2.rds.amazonaws.com:5432/postgres')
 
