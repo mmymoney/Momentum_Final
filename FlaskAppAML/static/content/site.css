@@ -54,6 +54,10 @@ input[type="checkbox"].input-validation-error {
     display: none;
 }
 
+ul {
+    list-style-type: none;
+}
+
 /* xkcd theme borrowed from https://github.com/imkevinxu/xkcdgraphs/blob/master/style.css */
 /* Artfully masterminded by Kevin Xu <kevin@imkevinxu.com> */
 
