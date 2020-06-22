@@ -85,16 +85,38 @@ def home():
     submission_df = pd.DataFrame(data = d, index = None)
     # -------------------------------------------------------------------------------------------
     #summed column -jsean
-    submission_df['sum'] = submission_df.sum(axis=1)
+    summed_df = submission_df.drop(columns=['email','sector_preference','periodicals'])
+    summed_df['sum'] = summed_df.sum(axis=1)
     #Return summed value as string - JOANA 
-    current_user_agg = submission_df.loc[submission_df['email'] == email,'sum'].item()
+    # there will always be only one item right?
+    current_user_sum = summed_df['sum'].item()
+    #current_user_agg = submission_df.loc[submission_df['email'] == email,'sum'].item()
 
-    #lower end = safer | higher = appetite
-    def chosen_etfs(user_agg):
-        if user_agg <= value and sector_preference == 'Financial Sector':
-            return # 
+    #lower end = riskier | higher = safer
+    # The ETF recommendations made is not financial advice. ETF listing is pulled from yahoo Finanace equity screener based upon filters and parameters. 
+    # The following parameters were used to determine whether the ETF was high, medium, and low risk. Parameter: morningstar performance rating overall is 4-5 stars
+    #High Risk: Morningstar Risk Rating Overrrall (5 stars)
+    etf_dictionary = {'Financial Sector':[('ETF NAME','High'),('ETF NAME','Medium'),('ETF NAME','Low')],
+                        'Technology Sector':[('ETF NAME','High'),('ETF NAME','Medium'),('ETF NAME','Low')],
+                       'Utilities':[('ETF NAME','High'),('ETF NAME','Medium'),('ETF NAME','Low')],
+                       'Healthcare':[('ETF NAME','High'),('ETF NAME','Medium'),('ETF NAME','Low')],
+                       'Energy':[('ETF NAME','High'),('ETF NAME','Medium'),('ETF NAME','Low')],
+                       'Consumer Staples':[('ETF NAME','High'),('ETF NAME','Medium'),('ETF NAME','Low')],
+                       'Commodities':[('ETF NAME','High'),('ETF NAME','Medium'),('ETF NAME','Low')],
+                       'Real Estate': [('ETF NAME','High'),('ETF NAME','Medium'),('ETF NAME','Low')] }
 
+    def chosen_etfs(user_agg,sector_chosen):
+        for key,value in etf_dictionary.items():
+            if sector_chosen == key:
+                if user_agg <= 35:
+                    return value[0][0]
+                if user_agg <= 55:
+                    return value[1][0]
+                else:
+                    return value[2][0]
 
+    chosen_etfs(current_user_sum, sector_preference)
+            
     # -------------------------------------------------------------------------------------------
     # from sqlalchemy import create_engine
     engine = create_engine('postgresql://root:rootroot@momentum-db.cgk0xpvhfuev.us-east-2.rds.amazonaws.com:5432/postgres')
