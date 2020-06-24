@@ -103,7 +103,8 @@ def home():
                        'Energy':[('ETF NAME','High'),('ETF NAME','Medium'),('ETF NAME','Low')],
                        'Consumer Staples':[('ETF NAME','High'),('ETF NAME','Medium'),('ETF NAME','Low')],
                        'Commodities':[('ETF NAME','High'),('ETF NAME','Medium'),('ETF NAME','Low')],
-                       'Real Estate': [('ETF NAME','High'),('ETF NAME','Medium'),('ETF NAME','Low')] }
+                       'Real Estate': [('ETF NAME','High'),('ETF NAME','Medium'),('ETF NAME','Low')],
+                       'Government Bonds': [('AGG','High'),('AGG','Medium'),('AGG','Low')] }
 
     def chosen_etfs(user_agg,sector_chosen):
         for key,value in etf_dictionary.items():
@@ -115,8 +116,18 @@ def home():
                 else:
                     return value[2][0]
 
-    chosen_etfs(current_user_sum, sector_preference)
-            
+    current_etf = chosen_etfs(current_user_sum, sector_preference)
+
+    # YAHOO API CALL with Current ETF information
+    #TEST with Government Bonds 
+    # ETF information - five year average
+ 
+
+    # BOND information-  stand alone AGG 
+
+    # SP 500
+    
+         
     # -------------------------------------------------------------------------------------------
     # from sqlalchemy import create_engine
     engine = create_engine('postgresql://root:rootroot@momentum-db.cgk0xpvhfuev.us-east-2.rds.amazonaws.com:5432/postgres')
