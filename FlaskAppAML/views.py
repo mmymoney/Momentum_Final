@@ -284,8 +284,8 @@ def home():
             # result = json.dumps(result, indent=4, sort_keys=True)
             return render_template(
                 'result.html',
-                title="Your portfolio:",
-                etf_content = "This is your etf chosen:" + chosen_etfs + "." + longbusinesssum)
+                title="Your portfolio:",)
+               # etf_content = "This is your etf chosen:" + chosen_etfs + "." + longbusinesssum)
                 # result=result
             
 
