@@ -19,14 +19,14 @@ import requests
 import math
 
 
-Bayesian_ML_KEY=os.environ.get('API_KEY', "6LgM3hobpFQkecNPOBz2QRHvSIzYJLdQBfahZtC49sPMjiOwIiNMAAtALXDNuZK1zE3DTzsKoJB4yvfZkSmDTQ==")
-Bayesian_URL = os.environ.get('URL', "https://ussouthcentral.services.azureml.net/workspaces/1ebda07f5b83468fa934325b157c5759/services/00d11b98f56946f286a640541b35f9ec/execute?api-version=2.0&details=true")
+# Bayesian_ML_KEY=os.environ.get('API_KEY', "6LgM3hobpFQkecNPOBz2QRHvSIzYJLdQBfahZtC49sPMjiOwIiNMAAtALXDNuZK1zE3DTzsKoJB4yvfZkSmDTQ==")
+# Bayesian_URL = os.environ.get('URL', "https://ussouthcentral.services.azureml.net/workspaces/1ebda07f5b83468fa934325b157c5759/services/00d11b98f56946f286a640541b35f9ec/execute?api-version=2.0&details=true")
 # Deployment environment variables defined on Azure (pull in with os.environ)
 
 # Construct the HTTP request header
 # HEADERS = {'Content-Type':'application/json', 'Authorization':('Bearer '+ API_KEY)}
 
-HEADERS = {'Content-Type':'application/json', 'Authorization':('Bearer '+ Bayesian_ML_KEY)}
+# HEADERS = {'Content-Type':'application/json', 'Authorization':('Bearer '+ Bayesian_ML_KEY)}
 
 # Our main app page/route
 @app.route('/', methods=['GET', 'POST'])
@@ -84,70 +84,65 @@ def home():
 
     submission_df = pd.DataFrame(data = d, index = None)
     # -------------------------------------------------------------------------------------------
-    #summed column -jsean
-    summed_df = submission_df.drop(columns=['email','sector_preference','periodicals'])
-    summed_df['sum'] = summed_df.sum(axis=1)
-    #Return summed value as string - JOANA 
-    # there will always be only one item right?
-    current_user_sum = summed_df['sum'].item()
-    #current_user_agg = submission_df.loc[submission_df['email'] == email,'sum'].item()
+    # #summed column -jsean
+    # summed_df = submission_df.drop(columns=['email','sector_preference','periodicals'])
+    # summed_df['sum'] = summed_df.sum(axis=1)
+    # #Return summed value as string - JOANA 
+    # # there will always be only one item right?
+    # current_user_sum = summed_df['sum'].item()
+    # #current_user_agg = submission_df.loc[submission_df['email'] == email,'sum'].item()
 
-    #lower end = riskier | higher = safer
-    # The ETF recommendations made is not financial advice. ETF listing is pulled from yahoo Finanace equity screener based upon filters and parameters. 
-    # The following parameters were used to determine whether the ETF was high, medium, and low risk. Parameter: morningstar performance rating overall is 4-5 stars
-    #High Risk: Morningstar Risk Rating Overrrall (5 stars)
-    etf_dictionary = {'Financial Sector':[('spy','High'),('spy','Medium'),('spy','Low')],
-                        'Technology Sector':[('spy','High'),('spy','Medium'),('spy','Low')],
-                       'Utilities':[('spy','High'),('spy','Medium'),('spy','Low')],
-                       'Healthcare':[('spy','High'),('spy','Medium'),('spy','Low')],
-                       'Energy':[('spy','High'),('spy','Medium'),('spy','Low')],
-                       'Consumer Staples':[('spy','High'),('spy','Medium'),('spy','Low')],
-                       'Commodities':[('spy','High'),('spy','Medium'),('spy','Low')],
-                       'Real Estate': [('spy','High'),('spy','Medium'),('spy','Low')],
-                       'Government Bonds': [('AGG','High'),('AGG','Medium'),('AGG','Low')] }
+    # #lower end = riskier | higher = safer
+    # # The ETF recommendations made is not financial advice. ETF listing is pulled from yahoo Finanace equity screener based upon filters and parameters. 
+    # # The following parameters were used to determine whether the ETF was high, medium, and low risk. Parameter: morningstar performance rating overall is 4-5 stars
+    # #High Risk: Morningstar Risk Rating Overrrall (5 stars)
+    # etf_dictionary = {'Financial Sector':[('iyf','High'),('vfh','Medium'),('kre','Low')],
+    #                     'Technology Sector':[('ftec','High'),('vgt','Medium'),('fdn','Low')],
+    #                    'Utilities':[('ryu','High'),('ylco','Medium'),('futy','Low')],
+    #                    'Healthcare':[('fhlc','High'),('ihi','Medium'),('xhe','Low')],
+    #                    'Energy':[('xle','High'),('ieo','Medium'),('pxi','Low')],
+    #                    'Consumer Staples':[('FSTA','High'),('vdc','Medium'),('iyk','Low')],
+    #                    'Commodities':[('pdbc','High'),('dbc','Medium'),('gsg','Low')],
+    #                    'Real Estate': [('mort','High'),('frel','Medium'),('vnq','Low')],
+    #                    'Government Bonds': [('AGG','High'),('AGG','Medium'),('AGG','Low')] }
 
-    def chosen_etfs(user_agg,sector_chosen):
-        for key,value in etf_dictionary.items():
-            if sector_chosen == key:
-                if user_agg <= 35:
-                    return value[0][0]
-                if user_agg <= 55:
-                    return value[1][0]
-                else:
-                    return value[2][0]
+    # def chosen_etfs(user_agg,sector_chosen):
+    #     for key,value in etf_dictionary.items():
+    #         if sector_chosen == key:
+    #             if user_agg <= 35:
+    #                 return value[0][0]
+    #             if user_agg <= 55:
+    #                 return value[1][0]
+    #             else:
+    #                 return value[2][0]
 
-    current_etf = chosen_etfs(current_user_sum, sector_preference)
+    # current_etf = chosen_etfs(current_user_sum, sector_preference)
 
-    #yahoo api call
-    import requests 
-    import json
+    # #yahoo api call
+    # import requests 
+    # import json
 
-    #ETF: fiveYrAvgReturnPct, threeyearaverage,keystatics-ytdReturn, 
-    #ETF: topholdings-sectorweightings, assetprofile-longBusinessSummary
-    #BONDS: ALSO APPLICABLE
-    url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/get-detail"
+    # #ETF: fiveYrAvgReturnPct, threeyearaverage,keystatics-ytdReturn, 
+    # #ETF: topholdings-sectorweightings, assetprofile-longBusinessSummary
+    # #BONDS: ALSO APPLICABLE
+    # url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/get-detail"
 
-    querystring = {"region":"US","lang":"en","symbol":current_etf}
+    # querystring = {"region":"US","lang":"en","symbol":current_etf}
 
-    headers = {
-        'x-rapidapi-host': "apidojo-yahoo-finance-v1.p.rapidapi.com",
-        'x-rapidapi-key': "ca07005c56mshafe5b7a7c516a9dp1b90e2jsn1e7c85e6edd1"
-        }
+    # headers = {
+    #     'x-rapidapi-host': "apidojo-yahoo-finance-v1.p.rapidapi.com",
+    #     'x-rapidapi-key': "ca07005c56mshafe5b7a7c516a9dp1b90e2jsn1e7c85e6edd1"
+    #     }
 
-    response = requests.request("GET", url, headers=headers, params=querystring)
-    response_json_etf2 = response.json()
-    three_yr = response_json_etf2['defaultKeyStatistics']['threeYearAverageReturn']['fmt']
-    five_yr = response_json_etf2['defaultKeyStatistics']['fiveYearAverageReturn']['fmt']
-    ytd_return = response_json_etf2['defaultKeyStatistics']['ytdReturn']['fmt']
-    topholdings = response_json_etf2['topHoldings']['sectorWeightings']
-    longbusinesssum = response_json_etf2['assetProfile']['longBusinessSummary']
-    bondratings_bonds = response_json_etf2['topHoldings']['bondRatings']
-    longbusinesssum_stocks = response_json_etf2['summaryProfile']['longBusinessSummary']
-    fiftytwoweekhigh_stocks = response_json_etf2['summaryDetail']['fiftyTwoWeekHigh']['fmt']
-    fiftytwoweeklow_stocks = response_json_etf2['summaryDetail']['fiftyTwoWeekLow']['fmt']
-    prevs_close_stocks = response_json_etf2['summaryDetail']['previousClose']['fmt']
-    recomm_trend_stocks = response_json_etf2['recommendationTrend']['trend'][0]
-    ROE_stocks = response_json_etf2['financialData']['returnOnEquity']['fmt']
+    # response = requests.request("GET", url, headers=headers, params=querystring)
+    # response_json_etf2 = response.json()
+
+    # # three_yr = response_json_etf2['defaultKeyStatistics']['threeYearAverageReturn']['fmt']
+    # # five_yr = response_json_etf2['defaultKeyStatistics']['fiveYearAverageReturn']['fmt']
+    # # ytd_return = response_json_etf2['defaultKeyStatistics']['ytdReturn']['fmt']
+    # # topholdings = response_json_etf2['topHoldings']['sectorWeightings']
+    # longbusinesssum = response_json_etf2['assetProfile']['longBusinessSummary']
+    # # bondratings_bonds = response_json_etf2['topHoldings']['bondRatings']
 
          
     # -------------------------------------------------------------------------------------------
@@ -203,49 +198,49 @@ def home():
         # Plug in the data into a dictionary object 
         #  - data from the input form
         #  - text data must be converted to lowercase
-        data =  {
-  "Inputs": {
-    "input1": {
-      "ColumnNames": [
-        "Open",
-        "High",
-        "Low",
-        "Close",
-        "Volume",
-        "T3_Vol_Diff",
-        "T3_Close_Diff",
-        "T3_Open_Diff",
-        "T2_Vol_Diff",
-        "T2_Close_Diff",
-        "T2_Open_Diff",
-        "T1_Vol_Diff",
-        "T1_Close_Diff",
-        "T1_Open_Diff",
-        "Prior_Day_Vert_Delta_Ratio",
-        "Retracement_Signal",
-        "Prior_Day_Derivative",
-        "T+1_Close",
-      ],
-      "Values": [
-        [
-            open_t,
-            high_t,
-            low_t,
-            close_t,
-            volume_t,
-            t_3_volumediff,
-            t_3_closediff,
-            t_3_opendiff,
-            t_2_volumediff,
-            t_2_closediff,
-            t_2_opendiff,
-            t_1_volumediff,
-            t_1_closediff,
-            t_1_opendiff,
-            pd_vert_delt,
-            retracement_sig,
-            pd_deriv,
-            ""
+#         data =  {
+#   "Inputs": {
+#     "input1": {
+#       "ColumnNames": [
+#         "Open",
+#         "High",
+#         "Low",
+#         "Close",
+#         "Volume",
+#         "T3_Vol_Diff",
+#         "T3_Close_Diff",
+#         "T3_Open_Diff",
+#         "T2_Vol_Diff",
+#         "T2_Close_Diff",
+#         "T2_Open_Diff",
+#         "T1_Vol_Diff",
+#         "T1_Close_Diff",
+#         "T1_Open_Diff",
+#         "Prior_Day_Vert_Delta_Ratio",
+#         "Retracement_Signal",
+#         "Prior_Day_Derivative",
+#         "T+1_Close",
+#       ],
+#       "Values": [
+#         [
+#             open_t,
+#             high_t,
+#             low_t,
+#             close_t,
+#             volume_t,
+#             t_3_volumediff,
+#             t_3_closediff,
+#             t_3_opendiff,
+#             t_2_volumediff,
+#             t_2_closediff,
+#             t_2_opendiff,
+#             t_1_volumediff,
+#             t_1_closediff,
+#             t_1_opendiff,
+#             pd_vert_delt,
+#             retracement_sig,
+#             pd_deriv,
+#             ""
         #   form.Open.data,
         #   form.High.data,
         #   form.Low.data,
@@ -264,33 +259,35 @@ def home():
         #   form.Retracement_Signal.data,
         #   form.Prior_Day_Derivative.data,
         #   ""
-        ]
-      ]
-    }
-  },
-  "GlobalParameters": {}
-}
+#         ]
+#       ]
+#     }
+#   },
+#   "GlobalParameters": {}
+# }
 
-        # Serialize the input data into json string
-        body = str.encode(json.dumps(data))
-# str.encode
-        # Formulate the request
-        #req = urllib.request.Request(URL, body, HEADERS)
-        req = urllib.request.Request(Bayesian_URL, body, HEADERS)
+#         # Serialize the input data into json string
+#         body = str.encode(json.dumps(data))
+# # str.encode
+#         # Formulate the request
+#         #req = urllib.request.Request(URL, body, HEADERS)
+#         req = urllib.request.Request(Bayesian_URL, body, HEADERS)
 
         # Send this request to the AML service and render the results on page
         try:
             # response = requests.post(URL, headers=HEADERS, data=body)
-            response = urllib.request.urlopen(req)
-            #print(response)
-            respdata = response.read()
-            result = json.loads(str(respdata, 'utf-8'))
-            result = do_something_pretty(result)
+            # response = urllib.request.urlopen(req)
+            # #print(response)
+            # respdata = response.read()
+            # result = json.loads(str(respdata, 'utf-8'))
+            # result = do_something_pretty(result)
             # result = json.dumps(result, indent=4, sort_keys=True)
             return render_template(
                 'result.html',
                 title="Your portfolio:",
-                result=result)
+                etf_content = "This is your etf chosen:" + chosen_etfs + "." + longbusinesssum)
+                # result=result
+            
 
         # An HTTP error
         except urllib.error.HTTPError as err:
@@ -298,7 +295,8 @@ def home():
             return render_template(
                 'result.html',
                 title='There was an error',
-                result=result)
+               # result=result
+            )
             #print(err)
 
     # Just serve up the input form

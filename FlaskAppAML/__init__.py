@@ -7,3 +7,4 @@ app = Flask(__name__)
 # app.secret_key = 'SHH!'
 
 import FlaskAppAML.views
+#import new .py as needed (secondary views file)
