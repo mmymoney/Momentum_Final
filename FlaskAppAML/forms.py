@@ -1,4 +1,4 @@
-from wtforms import Form, StringField, TextAreaField, validators, RadioField, SelectMultipleField
+from wtforms import Form, StringField, TextAreaField, validators, RadioField, SelectMultipleField, FloatField
 # from flask import Flask, render_template
 # from flask_wtf import Form
 # from wtforms.fields import DateField
@@ -32,6 +32,8 @@ class SubmissionForm(Form):
     three_yr_attitude = RadioField('Title', coerce=int, choices=[('1','I can tolerate a large loss'),('2','I can tolerate a moderate loss'),('3','I can tolerate a small loss'), ('4','It would be hard dealing with a loss'), ('5','I need to see at least a little return')])
     three_month_attitude = RadioField('Title', coerce=int, choices=[('1','I would not worry about losses in that time frame'),('2','A loss of more than 10% would concern me'),('3','I can only tolerate small short-term losses'), ('4','I would have a hard time stomaching any losses'), ('5','I would not be able to tolerate any losses')])
     age = RadioField('Title', coerce=int, choices=[('1','Less than 45'),('2','45 to 55'),('3','56 to 65'), ('4','66 to 75'), ('5','75 or older')])
+    etf_weighting = FloatField("your weight",default = 100)
+
     # Open = StringField('Title', [validators.Length(min=0, max=30)],default = 287.75)
     # High = StringField('Title', [validators.Length(min=0, max=30)], default = 289.779999)
     # Low = StringField('Title', [validators.Length(min=0, max=30)],default = 287.130005)

@@ -2,14 +2,23 @@
 
 {% block content %}
 
-<h3>{{ title }}</h3>
 
-<h2>{{ result|safe }}</h2>
+<form1 method = post>
+    <h3>{{ title }}</h3>
 
-<h3>Snapshot from AzureML interface</h3>
-This was implemented using Azure ML Studio.<br /><br />
+    <h2>{{ result|safe }}</h2>
+    
+    <h3>Snapshot from AzureML interface</h3>
+    This was implemented using Azure ML Studio.<br /><br />
+    
+    <p>{{etf_content}}</p>
+    
+    ETF Weighting:<br>
+    {{form1.etf_weighting}}
+    
+    <h3><strong>Disclaimer: </strong>Please note that we are not financial advisers and the information contained in this page should not be used for investment-decision-making.</h3>
+    {% endblock %}
 
-<p>{{etf_content}}</p>
 
-<h3><strong>Disclaimer: </strong>Please note that we are not financial advisers and the information contained in this page should not be used for investment-decision-making.</h3>
-{% endblock %}
+</form>
+

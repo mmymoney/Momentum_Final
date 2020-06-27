@@ -6,6 +6,7 @@ import urllib.request
 import os
 import pandas as pd
 from sqlalchemy import create_engine
+import numpy as np
 
 from datetime import datetime
 from flask import render_template, request, redirect
@@ -70,19 +71,32 @@ def home():
     poor_expectations = form.poor_expectations.data
     three_yr_attitude = form.three_yr_attitude.data
     three_month_attitude = form.three_yr_attitude.data
+    datetime_1 = datetime.now()
+
     
+    combined_periodicals = ""
+
+    while len(periodicals)>0:
+        combined_periodicals = periodicals[0] + ", " + combined_periodicals
+        periodicals = np.delete(periodicals, 0)
+
+    combined_aspirations = ""
+
+    while len(aspirations)>0:
+        combined_aspirations = aspirations[0] + ", " + combined_aspirations
+        aspirations = np.delete(aspirations, 0)
 
 #form dataframe from submission data
     d = {'age': age, 'email': email, 'income_level': income_level, 'sector_preference': sector_preference, 
-    'citizenship': citizenship, 'education': education, 'experience_years': experience_years, 'periodicals': periodicals, 
-    'aspirations': aspirations, 'diversification': diversification, 'brokerage_acct': brokerage_acct, 
+    'citizenship': citizenship, 'education': education, 'experience_years': experience_years, 'periodicals': combined_periodicals, 
+    'aspirations': combined_aspirations, 'diversification': diversification, 'brokerage_acct': brokerage_acct, 
     'interested_in_learning': interested_in_learning, 'scenario_1': scenario_1, 'scenario_2': scenario_2, 
     'port_diversified': port_diversified, 'safest_asset': safest_asset, 'income_drawing': income_drawing, 
     'fin_info': fin_info, 'return_expectations': return_expectations, 'normal_expectations':normal_expectations, 
     'poor_expectations': poor_expectations, 'three_yr_attitude': three_yr_attitude, 
-    'three_month_attitude': three_month_attitude}
+    'three_month_attitude': three_month_attitude, 'datetime': datetime_1}
 
-    submission_df = pd.DataFrame(data = d, index = None)
+    submission_df = pd.DataFrame(data = d, index = [0])
     
          
     # -------------------------------------------------------------------------------------------
