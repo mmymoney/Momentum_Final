@@ -8,13 +8,17 @@
 
     <h2>{{ result|safe }}</h2>
     
-    <h3>Snapshot from AzureML interface</h3>
-    This was implemented using Azure ML Studio.<br /><br />
+    <h3>Initial Results</h3>
+    <h4>Please see some summary detail regarding initial suggestions based on your assessed risk profile and questionnaire responses.</h4><br /><br />
     
     <p>{{etf_content}}</p>
     
     ETF Weighting:<br>
     {{etf_weighting}}
+
+    <br>
+    <br>
+    <p><input type="submit" value="submit" </p>
     
     <h3><strong>Disclaimer: </strong>Please note that we are not financial advisers and the information contained in this page should not be used for investment-decision-making.</h3>
     {% endblock %}
