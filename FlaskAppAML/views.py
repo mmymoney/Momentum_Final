@@ -11,7 +11,7 @@ from wtforms import Form, StringField, TextAreaField, validators, RadioField, Se
 
 
 from datetime import datetime
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, url_for
 from FlaskAppAML import app
 
 from FlaskAppAML.forms import SubmissionForm
@@ -33,7 +33,9 @@ import math
 
 # Our main app page/route
 @app.route('/', methods=['GET', 'POST'])
-@app.route('/home', methods=['GET', 'POST'])
+@app.route('/home',methods=['GET', 'POST'])
+# @app.route('/home/firsthome', endpoint='firsthome', methods=['GET', 'POST'])
+# @app.route('/home/secondhome',endpoint='secondhome',methods=['GET','POST'])
 def home():
     """Renders the home page which is the CNS of the web app currently, nothing pretty."""
     
@@ -150,7 +152,6 @@ def home():
 
     # Form has been submitted
     if request.method == 'POST':
-        # and form.validate()
 
 # -------------------------------------------------------------------------------------------
         # #summed column -jsean
@@ -187,6 +188,9 @@ def home():
                         return value[2][0]
 
         current_etf = chosen_etfs(current_user_sum, sector_preference)
+        global current_etf_global
+        current_etf_global = current_etf
+        
         # current_etf = chosen_etfs(65, 'Financial Sector')
 
         #yahoo api call
@@ -214,6 +218,14 @@ def home():
         topholdings = response_json_etf2['topHoldings']['sectorWeightings']
         longbusinesssum = response_json_etf2['assetProfile']['longBusinessSummary']
         bondratings_bonds = response_json_etf2['topHoldings']['bondRatings']
+
+        global three_yr_G, five_yr_G, ytd_return_G, topholdings_G, longbusinesssum_G, bondratings_bonds_G
+        three_yr_G = three_yr
+        five_yr_G = five_yr
+        ytd_return_G = ytd_return
+        topholdings_G = topholdings
+        longbusinesssum_G = longbusinesssum
+        bondratings_bonds_G = bondratings_bonds
 
         # Plug in the data into a dictionary object 
         #  - data from the input form
@@ -302,12 +314,20 @@ def home():
             # result = json.loads(str(respdata, 'utf-8'))
             # result = do_something_pretty(result)
             # result = json.dumps(result, indent=4, sort_keys=True)
-            return render_template(
-                'result.html',
-                title="Your portfolio:",
-               etf_content = "This is your etf chosen:" + current_etf + "." + longbusinesssum,
-               etf_weighting = form.etf_weighting)
-                # result=result
+            # if request.endpoint == 'firsthome':
+           # if request.method == 'POST':
+                # end result after ML resul2.html
+                return redirect(url_for('secondresult'))
+            
+                
+                    # result=result
+            # if request.endpoint == 'secondhome':
+            #     return render_template(
+            #         'result.html',
+            #         title = 'Your MACHINE LEARNING WEIGHTING',
+            #         etf_content = "This is your etf chosen:" + current_etf + "." + longbusinesssum,
+            #         etf_weighting = form.etf_weighting,
+            #     )
             
 
         # An HTTP error
@@ -328,6 +348,29 @@ def home():
         year="2020",
         message='Demonstrating a website using Azure ML Api')
 
+@app.route('/secondresult',methods=['GET','POST'])
+def secondresult():
+    form = SubmissionForm(request.form)
+    if request.method == 'POST':
+        # return ML RESULT
+        return render_template (
+            'contact.html'
+        )
+    else:
+        return render_template(
+                        'result.html',
+                        form=form,
+                        title="Your portfolio:",
+                        etf_content = "This is your etf chosen:" + current_etf_global + "." + longbusinesssum_G,
+                        tyg = three_yr_G,
+                        fyg = five_yr_G,
+                        yrg = ytd_return_G,
+                        thg = topholdings_G,
+                        brg = bondratings_bonds_G
+
+                        #+ home.longbusinesssum,
+                        # etf_weighting = form.etf_weighting
+                        )
 
 @app.route('/contact')
 def contact():

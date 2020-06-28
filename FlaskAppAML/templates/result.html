@@ -3,7 +3,7 @@
 {% block content %}
 
 
-<form method = post>
+<form method=post>
     <h3>{{ title }}</h3>
 
     <h2>{{ result|safe }}</h2>
@@ -14,9 +14,13 @@
     <p>{{etf_content}}</p>
     
     ETF Weighting:<br>
-    {{etf_weighting}}
-
+    {{form.etf_weighting}}
+    
     <br>
+    <p>The 3 year ETF return: {{tyg}}</p><br>
+    <p><b>The 5 year ETF return: {{fyg}}</b></p>
+    <p><b>The 5 year ETF return: {{fyg}}</b></p>
+    <p><b>The 5 year ETF return: {{fyg}}</b></p>
     <br>
     <p><input type="submit" value="submit" </p>
     
