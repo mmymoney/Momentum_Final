@@ -7,6 +7,8 @@ import os
 import pandas as pd
 from sqlalchemy import create_engine
 import numpy as np
+from wtforms import Form, StringField, TextAreaField, validators, RadioField, SelectMultipleField, FloatField
+
 
 from datetime import datetime
 from flask import render_template, request, redirect
@@ -303,7 +305,8 @@ def home():
             return render_template(
                 'result.html',
                 title="Your portfolio:",
-               etf_content = "This is your etf chosen:" + current_etf + "." + longbusinesssum)
+               etf_content = "This is your etf chosen:" + current_etf + "." + longbusinesssum,
+               etf_weighting = form.etf_weighting)
                 # result=result
             
 

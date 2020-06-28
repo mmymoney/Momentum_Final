@@ -3,7 +3,7 @@
 {% block content %}
 
 
-<form1 method = post>
+<form method = post>
     <h3>{{ title }}</h3>
 
     <h2>{{ result|safe }}</h2>
@@ -14,7 +14,7 @@
     <p>{{etf_content}}</p>
     
     ETF Weighting:<br>
-    {{form1.etf_weighting}}
+    {{etf_weighting}}
     
     <h3><strong>Disclaimer: </strong>Please note that we are not financial advisers and the information contained in this page should not be used for investment-decision-making.</h3>
     {% endblock %}
