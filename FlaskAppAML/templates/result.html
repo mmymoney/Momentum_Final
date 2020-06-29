@@ -37,34 +37,35 @@
           <br> The top holdings are: {{thagg_g}}
           <br> The ratings of the bonds held are the following (AAA equating high investment grade, B equating lower investment grade): <br>
             {{bragg_g}}
-        <br> For more information refer to: https://www.ssga.com/us/en/intermediary/etfs/fund-finder 
+        <br><a href="https://www.ssga.com/us/en/intermediary/etfs/fund-finder">Visit SSGA for more ETF information (click here)</a>
         </div>
 
         <h2>Stock Weightings</h2>
-        <p>Click on the button to see additional information.</p>
-        <br>{{form.sp1_weighting}}<br>
-        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#agg">AGG Information</button>
-        <div id="agg" class="collapse">
-            {{lbsagg_g}}<br><br>
-          The 3 year AGG return is {{tyagg_g}} and the 5 year return for AGG is {{fyagg_g}}. The year to date return is {{yragg_g}}.
-          <br> The top holdings are: {{thagg_g}}
-          <br> The ratings of the bonds held are the following (AAA equating high investment grade, B equating lower investment grade): <br>
-            {{bragg_g}}
-        <br> For more information refer to: https://www.ssga.com/us/en/intermediary/etfs/fund-finder 
-        </div>
+        <!-- <p>Click on the button to see additional information.</p> -->
+        <br>Chosen Energy Company (Ticker): {{form.energy_ticker}}
+         and corresponding weighting chosen is: {{form.energy_weighting}}<br>
+
+         <br>Chosen Technology Company (Ticker): {{form.tech_ticker}}
+         and corresponding weighting chosen is: {{form.tech_weighting}}<br>
+
+         <br>Chosen Utilities Company (Ticker): {{form.util_ticker}}
+         and corresponding weighting chosen is: {{form.util_weighting}}<br>
+
+         <br>Chosen Financial Company (Ticker): {{form.fin_ticker}}
+         and corresponding weighting chosen is: {{form.fin_weighting}}<br>
+
+         <br>Chosen Healthcare Company (Ticker): {{form.health_ticker}}
+         and corresponding weighting chosen is: {{form.health_weighting}}<br>
+
+         <br>Chosen Consumer Staple Company (Ticker): {{form.constap_ticker}}
+         and corresponding weighting chosen is: {{form.constap_weighting}}<br>
+
+         <br>Chosen Consumer Discretionary Company (Ticker): {{form.condisc_ticker}}
+         and corresponding weighting chosen is: {{form.condisc_weighting}}<br>
+        
       </div>
      
-      {{form.sp2_weighting}}
-      {{form.sp3_weighting}}
-
-    Please select up to 3 S&P 500 Stocks below and only ONE from each category: <br>
-    Category 1: Energy <br>
-    Category 2: Technology <br>
-    Category 3: Utilities<br>
-    Category 4: Financial<br>
-    Category 5: Healthcare<br>
-    Category 6: Consumer Staples<br>
-    Category 7: Consumer Discretionary<br>
+    
 
     <p><input type="submit" value="submit" </p>
     <br>For additional information on ETFs<br>
