@@ -3,22 +3,71 @@
 {% block content %}
 
 
-<form method = post>
+<form method=post>
     <h3>{{ title }}</h3>
 
-    <h2>{{ result|safe }}</h2>
+    <!-- <h2>{{ result|safe }}</h2> -->
     
-    <h3>Initial Results</h3>
-    <h4>Please see some summary detail regarding initial suggestions based on your assessed risk profile and questionnaire responses.</h4><br /><br />
-    
-    <p>{{etf_content}}</p>
-    
-    ETF Weighting:<br>
-    {{etf_weighting}}
+    <!-- <h3>Initial Results</h3> -->
+    <h4>Congratulations! Based upon your interests and who you are, the following portfolio has been created and tailored for you. 
+        Of course, as this is yours, not all equities have been picked as some we would like to leave up to you! The rule is simple: Each equity is given a percentage weight, analogous to a slice of pie. 
+    Your complete portfolio is 100% and we leave it up to you to decide the fraction of that 100% percent you would like each equity to be.
+    <br><br> Toggle the buttons for more information on equity before deciding. Your complete portfolio should be made up of 3 to 5 equities, and 2 equities have already been chosen for you.
+    <br> Choose well, and we'll catch you on the next pane.</h4><br /><br />
 
-    <br>
-    <br>
+    <div class="container">
+        <h2>{{etfg}} ETF Weighting</h2>
+        <p>Click on the button to see additional information.</p>
+        <br> {{form.etf_weighting}}
+        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#etf">{{etfg}} Information</button>
+        <div id="etf" class="collapse">
+          {{etf_content}}<br><br>
+          The 3 year ETF return is {{tyg}} and the 5 year return for {{etfg}} is {{fyg}}. The year to date return is {{yrg}}.
+          <br> The {{etfg}} top holdings are {{thg}}
+          <br> For more information refer to: https://www.ssga.com/us/en/intermediary/etfs/fund-finder 
+        </div>
+
+        <h2>AGG Bond Weighting</h2>
+        <p>Click on the button to see additional information.</p>
+        <br>{{form.bond_weighting}}
+        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#agg">AGG Information</button>
+        <div id="agg" class="collapse">
+            {{lbsagg_g}}<br><br>
+          The 3 year AGG return is {{tyagg_g}} and the 5 year return for AGG is {{fyagg_g}}. The year to date return is {{yragg_g}}.
+          <br> The top holdings are: {{thagg_g}}
+          <br> The ratings of the bonds held are the following (AAA equating high investment grade, B equating lower investment grade): <br>
+            {{bragg_g}}
+        <br> For more information refer to: https://www.ssga.com/us/en/intermediary/etfs/fund-finder 
+        </div>
+
+        <h2>Stock Weightings</h2>
+        <p>Click on the button to see additional information.</p>
+        <br>{{form.sp1_weighting}}<br>
+        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#agg">AGG Information</button>
+        <div id="agg" class="collapse">
+            {{lbsagg_g}}<br><br>
+          The 3 year AGG return is {{tyagg_g}} and the 5 year return for AGG is {{fyagg_g}}. The year to date return is {{yragg_g}}.
+          <br> The top holdings are: {{thagg_g}}
+          <br> The ratings of the bonds held are the following (AAA equating high investment grade, B equating lower investment grade): <br>
+            {{bragg_g}}
+        <br> For more information refer to: https://www.ssga.com/us/en/intermediary/etfs/fund-finder 
+        </div>
+      </div>
+     
+      {{form.sp2_weighting}}
+      {{form.sp3_weighting}}
+
+    Please select up to 3 S&P 500 Stocks below and only ONE from each category: <br>
+    Category 1: Energy <br>
+    Category 2: Technology <br>
+    Category 3: Utilities<br>
+    Category 4: Financial<br>
+    Category 5: Healthcare<br>
+    Category 6: Consumer Staples<br>
+    Category 7: Consumer Discretionary<br>
+
     <p><input type="submit" value="submit" </p>
+    <br>For additional information on ETFs<br>
     
     <h3><strong>Disclaimer: </strong>Please note that we are not financial advisers and the information contained in this page should not be used for investment-decision-making.</h3>
     {% endblock %}

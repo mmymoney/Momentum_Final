@@ -21,6 +21,7 @@ class SubmissionForm(Form):
     brokerage_acct = RadioField('Title', coerce=int, choices=[('0','No'),('1','Yes')])
     interested_in_learning = RadioField('Title', coerce=int, choices=[('0','No'),('1','Yes')])
     scenario_1 = RadioField('Title', coerce=int, choices=[('1','debt holder'),('5','equity holder')])
+    #bond_interest = RadioField('Title', coerce=int, choices=[('1','lower'),('5','higher')])
     scenario_2 = RadioField('Title', coerce=int, choices=[('1','fall'),('5','rise')])
     port_diversified = RadioField('Title', coerce=int, choices=[('1','no'),('5','yes')])
     safest_asset = RadioField('Title', coerce=int, choices=[('1','real estate'),('5','ethereum'), ('2','gold'),('3','british pound')])
@@ -32,7 +33,12 @@ class SubmissionForm(Form):
     three_yr_attitude = RadioField('Title', coerce=int, choices=[('1','I can tolerate a large loss'),('2','I can tolerate a moderate loss'),('3','I can tolerate a small loss'), ('4','It would be hard dealing with a loss'), ('5','I need to see at least a little return')])
     three_month_attitude = RadioField('Title', coerce=int, choices=[('1','I would not worry about losses in that time frame'),('2','A loss of more than 10% would concern me'),('3','I can only tolerate small short-term losses'), ('4','I would have a hard time stomaching any losses'), ('5','I would not be able to tolerate any losses')])
     age = RadioField('Title', coerce=int, choices=[('1','Less than 45'),('2','45 to 55'),('3','56 to 65'), ('4','66 to 75'), ('5','75 or older')])
+    
     etf_weighting = FloatField("Title",default = 100)
+    bond_weighting = FloatField("Title", default = 0)
+    sp1_weighting = FloatField("Title", default = 0)
+    sp2_weighting = FloatField("Title", default = 0)
+    sp3_weighting = FloatField("Title", default = 0)
 
     # Open = StringField('Title', [validators.Length(min=0, max=30)],default = 287.75)
     # High = StringField('Title', [validators.Length(min=0, max=30)], default = 289.779999)

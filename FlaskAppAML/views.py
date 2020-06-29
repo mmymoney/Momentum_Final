@@ -11,7 +11,7 @@ from wtforms import Form, StringField, TextAreaField, validators, RadioField, Se
 
 
 from datetime import datetime
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, url_for
 from FlaskAppAML import app
 
 from FlaskAppAML.forms import SubmissionForm
@@ -33,7 +33,9 @@ import math
 
 # Our main app page/route
 @app.route('/', methods=['GET', 'POST'])
-@app.route('/home', methods=['GET', 'POST'])
+@app.route('/home',methods=['GET', 'POST'])
+# @app.route('/home/firsthome', endpoint='firsthome', methods=['GET', 'POST'])
+# @app.route('/home/secondhome',endpoint='secondhome',methods=['GET','POST'])
 def home():
     """Renders the home page which is the CNS of the web app currently, nothing pretty."""
     
@@ -150,7 +152,6 @@ def home():
 
     # Form has been submitted
     if request.method == 'POST':
-        # and form.validate()
 
 # -------------------------------------------------------------------------------------------
         # #summed column -jsean
@@ -166,14 +167,14 @@ def home():
         # # The ETF recommendations made is not financial advice. ETF listing is pulled from yahoo Finanace equity screener based upon filters and parameters. 
         # # The following parameters were used to determine whether the ETF was high, medium, and low risk. Parameter: morningstar performance rating overall is 4-5 stars
         # #High Risk: Morningstar Risk Rating Overrrall (5 stars)
-        etf_dictionary = {'Financial Sector':[('iyf','High'),('vfh','Medium'),('kre','Low')],
-                            'Technology Sector':[('ftec','High'),('vgt','Medium'),('fdn','Low')],
-                        'Utilities':[('ryu','High'),('ylco','Medium'),('futy','Low')],
-                        'Healthcare':[('fhlc','High'),('ihi','Medium'),('xhe','Low')],
-                        'Energy':[('xle','High'),('ieo','Medium'),('pxi','Low')],
-                        'Consumer Staples':[('FSTA','High'),('vdc','Medium'),('iyk','Low')],
-                        'Commodities':[('pdbc','High'),('dbc','Medium'),('gsg','Low')],
-                        'Real Estate': [('mort','High'),('frel','Medium'),('vnq','Low')],
+        etf_dictionary = {'Financial Sector':[('IYF','High'),('VFH','Medium'),('KRE','Low')],
+                            'Technology Sector':[('FTEC','High'),('VGT','Medium'),('FDN','Low')],
+                        'Utilities':[('RYU','High'),('YLCO','Medium'),('FUTY','Low')],
+                        'Healthcare':[('FHLC','High'),('IHI','Medium'),('XHE','Low')],
+                        'Energy':[('XLE','High'),('IEO','Medium'),('PXI','Low')],
+                        'Consumer Staples':[('FSTA','High'),('VDC','Medium'),('IYK','Low')],
+                        'Commodities':[('PDBC','High'),('DBC','Medium'),('GSG','Low')],
+                        'Real Estate': [('MORT','High'),('FREL','Medium'),('VNQ','Low')],
                         'Government Bonds': [('AGG','High'),('AGG','Medium'),('AGG','Low')] }
 
         def chosen_etfs(user_agg,sector_chosen):
@@ -187,6 +188,9 @@ def home():
                         return value[2][0]
 
         current_etf = chosen_etfs(current_user_sum, sector_preference)
+        global current_etf_global
+        current_etf_global = current_etf
+        
         # current_etf = chosen_etfs(65, 'Financial Sector')
 
         #yahoo api call
@@ -199,21 +203,47 @@ def home():
         url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/get-detail"
 
         querystring = {"region":"US","lang":"en","symbol":current_etf}
+        querystring2 = {"region": "US", "lang":"en","symbol":"AGG"}
 
         headers = {
             'x-rapidapi-host': "apidojo-yahoo-finance-v1.p.rapidapi.com",
             'x-rapidapi-key': "ca07005c56mshafe5b7a7c516a9dp1b90e2jsn1e7c85e6edd1"
             }
 
+
         response = requests.request("GET", url, headers=headers, params=querystring)
+        response_agg = requests.request("GET",url, headers=headers, params=querystring2)
+
         response_json_etf2 = response.json()
+        response_agg = response_agg.json()
 
         three_yr = response_json_etf2['defaultKeyStatistics']['threeYearAverageReturn']['fmt']
         five_yr = response_json_etf2['defaultKeyStatistics']['fiveYearAverageReturn']['fmt']
         ytd_return = response_json_etf2['defaultKeyStatistics']['ytdReturn']['fmt']
         topholdings = response_json_etf2['topHoldings']['sectorWeightings']
         longbusinesssum = response_json_etf2['assetProfile']['longBusinessSummary']
-        bondratings_bonds = response_json_etf2['topHoldings']['bondRatings']
+       #AGG information
+        three_yr_agg = response_agg['defaultKeyStatistics']['threeYearAverageReturn']['fmt']
+        five_yr_agg = response_agg['defaultKeyStatistics']['fiveYearAverageReturn']['fmt']
+        ytd_return_agg = response_agg['defaultKeyStatistics']['ytdReturn']['fmt']
+        topholdings_agg = response_agg['topHoldings']['sectorWeightings']
+        longbusinesssum_agg = response_agg['assetProfile']['longBusinessSummary']
+        bondratings_bonds_agg = response_agg['topHoldings']['bondRatings']
+
+        global three_yr_G, five_yr_G, ytd_return_G, topholdings_G,longbusinesssum_G, bondratings_bonds_G, three_yr_agg_G, five_yr_agg_G, ytd_return_agg_G, topholdings_agg_G, longbusinesssum_agg_G
+
+        three_yr_G = three_yr
+        five_yr_G = five_yr
+        ytd_return_G = ytd_return
+        topholdings_G = topholdings
+        longbusinesssum_G = longbusinesssum
+        bondratings_bonds_G = bondratings_bonds_agg
+        three_yr_agg_G = three_yr_agg
+        five_yr_agg_G = five_yr_agg
+        ytd_return_agg_G = ytd_return_agg
+        topholdings_agg_G = topholdings_agg
+        longbusinesssum_agg_G = longbusinesssum_agg
+        
 
         # Plug in the data into a dictionary object 
         #  - data from the input form
@@ -302,12 +332,20 @@ def home():
             # result = json.loads(str(respdata, 'utf-8'))
             # result = do_something_pretty(result)
             # result = json.dumps(result, indent=4, sort_keys=True)
-            return render_template(
-                'result.html',
-                title="Your portfolio:",
-               etf_content = "This is your etf chosen:" + current_etf + "." + longbusinesssum,
-               etf_weighting = form.etf_weighting)
-                # result=result
+            # if request.endpoint == 'firsthome':
+           # if request.method == 'POST':
+                # end result after ML resul2.html
+                return redirect(url_for('secondresult'))
+            
+                
+                    # result=result
+            # if request.endpoint == 'secondhome':
+            #     return render_template(
+            #         'result.html',
+            #         title = 'Your MACHINE LEARNING WEIGHTING',
+            #         etf_content = "This is your etf chosen:" + current_etf + "." + longbusinesssum,
+            #         etf_weighting = form.etf_weighting,
+            #     )
             
 
         # An HTTP error
@@ -328,6 +366,42 @@ def home():
         year="2020",
         message='Demonstrating a website using Azure ML Api')
 
+@app.route('/secondresult',methods=['GET','POST'])
+def secondresult():
+    form = SubmissionForm(request.form)
+    etf_weight = form.etf_weighting.data
+    bond_weight = form.bond_weighting.data
+    stock1_weight = form.sp1_weighting.data
+    stock2_weight = form.sp2_weighting.data
+    stock3_weight = form.sp3_weighting.data
+    
+    if request.method == 'POST':
+        # return ML CALLS 
+        return render_template (
+            'final_result.html'
+        )
+    else:
+        return render_template(
+                        'result.html',
+                        form=form,
+                        title="Your portfolio:",
+                        etf_content = longbusinesssum_G,
+                        etfg = current_etf_global,
+                        tyg = three_yr_G,
+                        fyg = five_yr_G,
+                        yrg = ytd_return_G,
+                        thg = topholdings_G,
+                        bragg_g = bondratings_bonds_G, 
+                        tyagg_g = three_yr_agg_G, 
+                        fyagg_g = five_yr_agg_G,
+                        yragg_g = ytd_return_agg_G,
+                        thagg_g = topholdings_agg_G, 
+                        lbsagg_g = longbusinesssum_agg_G, 
+                        
+
+                        #+ home.longbusinesssum,
+                        # etf_weighting = form.etf_weighting
+                        )
 
 @app.route('/contact')
 def contact():
