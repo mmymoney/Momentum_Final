@@ -18,24 +18,20 @@ from FlaskAppAML.forms import SubmissionForm
 
 # additional dependencies for API call to Rapid API (Yahoo Finance)
 import requests
-
 import math
 
-
-# Bayesian_ML_KEY=os.environ.get('API_KEY', "6LgM3hobpFQkecNPOBz2QRHvSIzYJLdQBfahZtC49sPMjiOwIiNMAAtALXDNuZK1zE3DTzsKoJB4yvfZkSmDTQ==")
-# Bayesian_URL = os.environ.get('URL', "https://ussouthcentral.services.azureml.net/workspaces/1ebda07f5b83468fa934325b157c5759/services/00d11b98f56946f286a640541b35f9ec/execute?api-version=2.0&details=true")
+Bayesian_ML_KEY=os.environ.get('API_KEY', "6LgM3hobpFQkecNPOBz2QRHvSIzYJLdQBfahZtC49sPMjiOwIiNMAAtALXDNuZK1zE3DTzsKoJB4yvfZkSmDTQ==")
+Bayesian_URL = os.environ.get('URL', "https://ussouthcentral.services.azureml.net/workspaces/1ebda07f5b83468fa934325b157c5759/services/00d11b98f56946f286a640541b35f9ec/execute?api-version=2.0&details=true")
 # Deployment environment variables defined on Azure (pull in with os.environ)
 
 # Construct the HTTP request header
 # HEADERS = {'Content-Type':'application/json', 'Authorization':('Bearer '+ API_KEY)}
+HEADERS = {'Content-Type':'application/json', 'Authorization':('Bearer '+ Bayesian_ML_KEY)}
 
-# HEADERS = {'Content-Type':'application/json', 'Authorization':('Bearer '+ Bayesian_ML_KEY)}
 
 # Our main app page/route
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/home',methods=['GET', 'POST'])
-# @app.route('/home/firsthome', endpoint='firsthome', methods=['GET', 'POST'])
-# @app.route('/home/secondhome',endpoint='secondhome',methods=['GET','POST'])
 def home():
     """Renders the home page which is the CNS of the web app currently, nothing pretty."""
     
@@ -46,12 +42,9 @@ def home():
     "password": "rootroot",
     "driver":"org.postgresql.Driver"}
 
-
-
-
     form = SubmissionForm(request.form)
 
-#variable formation based on questionnaire submissions
+    #variable formation based on questionnaire submissions
     age = form.age.data
     email = form.email.data
     income_level = form.income_level.data
@@ -77,20 +70,17 @@ def home():
     three_month_attitude = form.three_yr_attitude.data
     datetime_1 = datetime.now()
 
-    
+    # iterate and combine to string MultipleEntryField
     combined_periodicals = ""
-
+    combined_aspirations = ""
     while len(periodicals)>0:
         combined_periodicals = periodicals[0] + ", " + combined_periodicals
         periodicals = np.delete(periodicals, 0)
-
-    combined_aspirations = ""
-
     while len(aspirations)>0:
         combined_aspirations = aspirations[0] + ", " + combined_aspirations
         aspirations = np.delete(aspirations, 0)
 
-#form dataframe from submission data
+    #form dataframe from submission data
     d = {'age': age, 'email': email, 'income_level': income_level, 'sector_preference': sector_preference, 
     'citizenship': citizenship, 'education': education, 'experience_years': experience_years, 'periodicals': combined_periodicals, 
     'aspirations': combined_aspirations, 'diversification': diversification, 'brokerage_acct': brokerage_acct, 
@@ -332,20 +322,13 @@ def home():
             # result = json.loads(str(respdata, 'utf-8'))
             # result = do_something_pretty(result)
             # result = json.dumps(result, indent=4, sort_keys=True)
-            # if request.endpoint == 'firsthome':
-           # if request.method == 'POST':
-                # end result after ML resul2.html
+          # return render_template( 'final_result.html',title=, result=result)
+               
                 return redirect(url_for('secondresult'))
             
                 
                     # result=result
-            # if request.endpoint == 'secondhome':
-            #     return render_template(
-            #         'result.html',
-            #         title = 'Your MACHINE LEARNING WEIGHTING',
-            #         etf_content = "This is your etf chosen:" + current_etf + "." + longbusinesssum,
-            #         etf_weighting = form.etf_weighting,
-            #     )
+
             
 
         # An HTTP error
@@ -368,40 +351,130 @@ def home():
 
 @app.route('/secondresult',methods=['GET','POST'])
 def secondresult():
+
     form = SubmissionForm(request.form)
     etf_weight = form.etf_weighting.data
     bond_weight = form.bond_weighting.data
-    stock1_weight = form.sp1_weighting.data
-    stock2_weight = form.sp2_weighting.data
-    stock3_weight = form.sp3_weighting.data
+    energy_weight = form.energy_weighting.data
+    tech_weight = form.tech_weighting.data
+    util_weight = form.util_weighting.data
+    fin_weight = form.fin_weighting.data
+    health_weight = form.health_weighting.data
+    constap_weight = form.constap_weighting.data
+    condisc_weight = form.condisc_weighting.data
+    energy_tick = form.energy_ticker.data
+    tech_tick = form.tech_ticker.data
+    util_tick = form.util_ticker.data
+    fin_tick = form.fin_ticker.data
+    health_tick = form.health_ticker.data
+    constap_tick = form.constap_ticker.data
+    condisc_tick = form.condisc_ticker.data
     
-    if request.method == 'POST':
-        # return ML CALLS 
-        return render_template (
-            'final_result.html'
-        )
-    else:
-        return render_template(
-                        'result.html',
-                        form=form,
-                        title="Your portfolio:",
-                        etf_content = longbusinesssum_G,
-                        etfg = current_etf_global,
-                        tyg = three_yr_G,
-                        fyg = five_yr_G,
-                        yrg = ytd_return_G,
-                        thg = topholdings_G,
-                        bragg_g = bondratings_bonds_G, 
-                        tyagg_g = three_yr_agg_G, 
-                        fyagg_g = five_yr_agg_G,
-                        yragg_g = ytd_return_agg_G,
-                        thagg_g = topholdings_agg_G, 
-                        lbsagg_g = longbusinesssum_agg_G, 
-                        
+    #timestamp conversion from user-submitted date
+    timestamp_t = str(int(datetime.strptime(form.Date.data , '%Y-%m-%d').timestamp())+86400)
+    timestamp_priordays = str(int(timestamp_t)-(86400*7))
+#variables for call
+    url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-historical-data"
 
-                        #+ home.longbusinesssum,
-                        # etf_weighting = form.etf_weighting
-                        )
+    querystring = {"frequency":"1d","filter":"history","period1":timestamp_priordays,"period2":timestamp_t,"symbol":"AGG"}
+
+    headers = {
+        'x-rapidapi-host': "apidojo-yahoo-finance-v1.p.rapidapi.com",
+        'x-rapidapi-key': "ca07005c56mshafe5b7a7c516a9dp1b90e2jsn1e7c85e6edd1"
+        }
+
+    response = requests.request("GET", url, headers=headers, params=querystring)
+
+    #convert response variable to json format for slicing / variable assignment
+    response_json = response.json()
+
+    # feature set variables
+    open_t = response_json['prices'][0]['open']
+    high_t =  response_json['prices'][0]['high']
+    low_t =  response_json['prices'][0]['low']
+    close_t =  response_json['prices'][0]['close']
+    volume_t =  response_json['prices'][0]['volume']
+    t_1_closediff = response_json['prices'][1]['close'] - response_json['prices'][0]['close']
+
+    if request.method == 'POST':
+        # Plug in the data into a dictionary object 
+        #  - data from the input form
+        #  - text data must be converted to lowercase
+            data =  {
+    "Inputs": {
+        "input1": {
+        "ColumnNames": [
+            "Open",
+            "High",
+            "Low",
+            "Close",
+            "Volume"],
+        "Values": [
+            [
+                open_t,
+                high_t,
+                low_t,
+                close_t,
+                volume_t,
+                t_1_closediff,
+                ""]
+            ]
+        }
+    },
+    "GlobalParameters": {}
+    }
+            # Serialize the input data into json string
+            body = str.encode(json.dumps(data))
+    # str.encode
+            # Formulate the request
+            #req = urllib.request.Request(URL, body, HEADERS)
+            req = urllib.request.Request(Bayesian_URL, body, HEADERS)
+            #HELLO
+            # Send this request to the AML service and render the results on page
+            try:
+                response = requests.post(URL, headers=HEADERS, data=body)
+                response = urllib.request.urlopen(req)
+                #print(response)
+                respdata = response.read()
+                result = json.loads(str(respdata, 'utf-8'))
+                result = do_something_pretty(result)
+                result = json.dumps(result, indent=4, sort_keys=True)
+            
+                return render_template (
+                    'final_result.html',
+                    title= 'The following prediction was made for the return of your portfolio:',
+                    result=result
+                )
+        # An HTTP error
+            except urllib.error.HTTPError as err:
+                result="The request failed with status code: " + str(err.code)
+                return render_template(
+                    'final_result.html',
+                    title='There was an error',
+                # result=result
+                    )
+                # result=result
+            #----
+            
+    return render_template(
+                'result.html',
+                form=form,
+                title="Your portfolio:",
+                etf_content = longbusinesssum_G,
+                etfg = current_etf_global,
+                tyg = three_yr_G,
+                fyg = five_yr_G,
+                yrg = ytd_return_G,
+                thg = topholdings_G,
+                bragg_g = bondratings_bonds_G, 
+                tyagg_g = three_yr_agg_G, 
+                fyagg_g = five_yr_agg_G,
+                yragg_g = ytd_return_agg_G,
+                thagg_g = topholdings_agg_G, 
+                lbsagg_g = longbusinesssum_agg_G, 
+                
+
+                )
 
 @app.route('/contact')
 def contact():
