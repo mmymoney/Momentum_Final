@@ -1,4 +1,4 @@
-from wtforms import Form, StringField, TextAreaField, validators, RadioField, SelectMultipleField, FloatField
+from wtforms import Form, StringField, TextAreaField, validators, RadioField, SelectMultipleField, FloatField, SelectField
 # from flask import Flask, render_template
 # from flask_wtf import Form
 # from wtforms.fields import DateField
@@ -33,12 +33,34 @@ class SubmissionForm(Form):
     three_yr_attitude = RadioField('Title', coerce=int, choices=[('1','I can tolerate a large loss'),('2','I can tolerate a moderate loss'),('3','I can tolerate a small loss'), ('4','It would be hard dealing with a loss'), ('5','I need to see at least a little return')])
     three_month_attitude = RadioField('Title', coerce=int, choices=[('1','I would not worry about losses in that time frame'),('2','A loss of more than 10% would concern me'),('3','I can only tolerate small short-term losses'), ('4','I would have a hard time stomaching any losses'), ('5','I would not be able to tolerate any losses')])
     age = RadioField('Title', coerce=int, choices=[('1','Less than 45'),('2','45 to 55'),('3','56 to 65'), ('4','66 to 75'), ('5','75 or older')])
-    
+    # weightings and tickers
     etf_weighting = FloatField("Title",default = 100)
     bond_weighting = FloatField("Title", default = 0)
-    sp1_weighting = FloatField("Title", default = 0)
-    sp2_weighting = FloatField("Title", default = 0)
-    sp3_weighting = FloatField("Title", default = 0)
+    energy_weighting = FloatField("Title", default = 0)
+    tech_weighting = FloatField("Title", default = 0)
+    util_weighting = FloatField("Title", default = 0)
+    fin_weighting = FloatField("Title", default = 0)
+    health_weighting = FloatField("Title", default = 0)
+    constap_weighting = FloatField("Title", default = 0)
+    condisc_weighting = FloatField("Title", default = 0)
+
+    energy_tickers = ['CVX','XOM','EOG']
+    tech_tickers = ['MSFT','AAPL','V','MA','PYPL']
+    util_tickers = ['NEE','D','DUK']
+    fin_tickers = ['BRK.B','JPM','BAC','AXP']
+    healthcare_tickers = ['JNJ','UNH','MRK','PFE','ABBV']
+    constap_tickers = ['PG','PEP','KO','WMT']
+    condisc_tickers = ['AMZN','HD','MCD','NKE','SBUX','TGT']
+
+    energy_ticker = SelectField('Title', choices = energy_tickers)
+    tech_ticker = SelectField('Title', choices = tech_tickers)
+    util_ticker = SelectField('Title', choices = util_tickers)
+    fin_ticker = SelectField('Title', choices = fin_tickers)
+    health_ticker = SelectField('Title', choices = healthcare_tickers)
+    constap_ticker = SelectField('Title', choices = constap_tickers)
+    condisc_ticker = SelectField('Title', choices = condisc_tickers)
+
+    
 
     # Open = StringField('Title', [validators.Length(min=0, max=30)],default = 287.75)
     # High = StringField('Title', [validators.Length(min=0, max=30)], default = 289.779999)
