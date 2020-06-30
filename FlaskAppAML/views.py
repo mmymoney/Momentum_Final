@@ -10,7 +10,7 @@ import numpy as np
 from wtforms import Form, StringField, TextAreaField, validators, RadioField, SelectMultipleField, FloatField
 
 
-from datetime import datetime
+from datetime import datetime, date
 from flask import render_template, request, redirect, url_for
 from FlaskAppAML import app
 
@@ -19,14 +19,6 @@ from FlaskAppAML.forms import SubmissionForm
 # additional dependencies for API call to Rapid API (Yahoo Finance)
 import requests
 import math
-
-Bayesian_ML_KEY=os.environ.get('API_KEY', "6LgM3hobpFQkecNPOBz2QRHvSIzYJLdQBfahZtC49sPMjiOwIiNMAAtALXDNuZK1zE3DTzsKoJB4yvfZkSmDTQ==")
-Bayesian_URL = os.environ.get('URL', "https://ussouthcentral.services.azureml.net/workspaces/1ebda07f5b83468fa934325b157c5759/services/00d11b98f56946f286a640541b35f9ec/execute?api-version=2.0&details=true")
-# Deployment environment variables defined on Azure (pull in with os.environ)
-
-# Construct the HTTP request header
-# HEADERS = {'Content-Type':'application/json', 'Authorization':('Bearer '+ API_KEY)}
-HEADERS = {'Content-Type':'application/json', 'Authorization':('Bearer '+ Bayesian_ML_KEY)}
 
 
 # Our main app page/route
@@ -333,7 +325,7 @@ def home():
 
         # An HTTP error
         except urllib.error.HTTPError as err:
-            result="The request failed with status code: " + str(err.code)
+           # result="The request failed with status code: " + str(err.code)
             return render_template(
                 'result.html',
                 title='There was an error',
@@ -348,6 +340,9 @@ def home():
         title='Run App',
         year="2020",
         message='Demonstrating a website using Azure ML Api')
+
+# Machine Learning Route
+
 
 @app.route('/secondresult',methods=['GET','POST'])
 def secondresult():
@@ -369,14 +364,18 @@ def secondresult():
     health_tick = form.health_ticker.data
     constap_tick = form.constap_ticker.data
     condisc_tick = form.condisc_ticker.data
+    datetime_1 = datetime.now()
+    date_1 = date.today()
     
     #timestamp conversion from user-submitted date
-    timestamp_t = str(int(datetime.strptime(form.Date.data , '%Y-%m-%d').timestamp())+86400)
+    timestamp_t = str(int(datetime.strptime(str(date_1) , '%Y-%m-%d').timestamp()))
+
     timestamp_priordays = str(int(timestamp_t)-(86400*7))
 #variables for call
     url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-historical-data"
 
-    querystring = {"frequency":"1d","filter":"history","period1":timestamp_priordays,"period2":timestamp_t,"symbol":"AGG"}
+    # Financial (VFH ETF)
+    querystring = {"frequency":"1d","filter":"history","period1":timestamp_priordays,"period2":timestamp_t,"symbol":"VFH"}
 
     headers = {
         'x-rapidapi-host': "apidojo-yahoo-finance-v1.p.rapidapi.com",
@@ -393,8 +392,10 @@ def secondresult():
     high_t =  response_json['prices'][0]['high']
     low_t =  response_json['prices'][0]['low']
     close_t =  response_json['prices'][0]['close']
+    adjclose_t =  response_json['prices'][0]['adjclose']
     volume_t =  response_json['prices'][0]['volume']
     t_1_closediff = response_json['prices'][1]['close'] - response_json['prices'][0]['close']
+
 
     if request.method == 'POST':
         # Plug in the data into a dictionary object 
@@ -404,46 +405,66 @@ def secondresult():
     "Inputs": {
         "input1": {
         "ColumnNames": [
+            "Date",
             "Open",
             "High",
             "Low",
             "Close",
-            "Volume"],
+            "Adj Close",
+            "Volume",
+            "T-1_Close_Diff",
+            "T+30_Close"],
         "Values": [
             [
+                str(date_1),
                 open_t,
                 high_t,
                 low_t,
                 close_t,
+                adjclose_t,
                 volume_t,
                 t_1_closediff,
-                ""]
+                "2"]
             ]
         }
     },
     "GlobalParameters": {}
     }
+
             # Serialize the input data into json string
             body = str.encode(json.dumps(data))
+
+            VFH_ML_KEY=os.environ.get('API_KEY', "Vhn2qxUWhxiL6LNuXfxnzQdpkzP/aiLuTFFQbUIvBh3banh76IrzKPMexJ5YuB0yXFL7tJI61uhBR2RIPvDPSA==")
+            VFH_URL = os.environ.get('URL', "https://ussouthcentral.services.azureml.net/workspaces/1ebda07f5b83468fa934325b157c5759/services/c46da9cb3adb47e5be306c388a9533ce/execute?api-version=2.0&details=true")
+            # Deployment environment variables defined on Azure (pull in with os.environ)
+
+            # Construct the HTTP request header
+            # HEADERS = {'Content-Type':'application/json', 'Authorization':('Bearer '+ API_KEY)}
+            HEADERS = {'Content-Type':'application/json', 'Authorization':('Bearer '+ VFH_ML_KEY)}
+
     # str.encode
             # Formulate the request
             #req = urllib.request.Request(URL, body, HEADERS)
-            req = urllib.request.Request(Bayesian_URL, body, HEADERS)
-            #HELLO
+            #req = urllib.request.Request(VFH_URL, body, HEADERS)
+            
             # Send this request to the AML service and render the results on page
             try:
-                response = requests.post(URL, headers=HEADERS, data=body)
+               # response = requests.post(URL, headers=HEADERS, data=body)
+                req = urllib.request.Request(VFH_URL, body, HEADERS)
                 response = urllib.request.urlopen(req)
                 #print(response)
                 respdata = response.read()
-                result = json.loads(str(respdata, 'utf-8'))
-                result = do_something_pretty(result)
-                result = json.dumps(result, indent=4, sort_keys=True)
+                print(respdata)
+                #result = json.loads(str(respdata, 'utf-8'))
+                #result = do_something_pretty(result)
+                
+                #result = json.dumps(result, indent=4, sort_keys=True)
             
                 return render_template (
                     'final_result.html',
                     title= 'The following prediction was made for the return of your portfolio:',
-                    result=result
+                    #result=result
+                    result=respdata,
                 )
         # An HTTP error
             except urllib.error.HTTPError as err:
@@ -451,8 +472,8 @@ def secondresult():
                 return render_template(
                     'final_result.html',
                     title='There was an error',
-                # result=result
-                    )
+            # result=result
+                )
                 # result=result
             #----
             
@@ -529,7 +550,7 @@ def do_something_pretty(jsondata):
     # valuelen = len(value)
     print(value)
 
-    scored_label = value[18]
+    scored_label = value[8]
     
     # Convert values (a list) to a list of tuples [(cluster#,distance),...]
     # valuetuple = list(zip(range(valuelen-1), value[1:(valuelen)]))
@@ -542,7 +563,7 @@ def do_something_pretty(jsondata):
     # Build a placeholder for the cluster#,distance values
     #repstr = '<tr><td>%d</td><td>%s</td></tr>' * (valuelen-1)
     # print(repstr)
-    output_bayesian=f'Our linear regression model would predict a closing value of {str(round((float(scored_label)*294.433746 + 43.90625),2))} USD for the trading day following {form.Date.data}'
+    output_bayesian=f'Our linear regression model would predict a closing value of {str(scored_label)} USD for the 30th trading day following'
     # Build the entire html table for the results data representation
     #tablestr = 'Cluster assignment: %s<br><br><table border="1"><tr><th>Cluster</th><th>Distance From Center</th></tr>'+ repstr + "</table>"
     #return tablestr % data

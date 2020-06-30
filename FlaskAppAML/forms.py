@@ -47,7 +47,7 @@ class SubmissionForm(Form):
     energy_tickers = ['CVX','XOM','EOG']
     tech_tickers = ['MSFT','AAPL','V','MA','PYPL']
     util_tickers = ['NEE','D','DUK']
-    fin_tickers = ['BRK.B','JPM','BAC','AXP']
+    fin_tickers = ['JPM','BAC','AXP']
     healthcare_tickers = ['JNJ','UNH','MRK','PFE','ABBV']
     constap_tickers = ['PG','PEP','KO','WMT']
     condisc_tickers = ['AMZN','HD','MCD','NKE','SBUX','TGT']
