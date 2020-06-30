@@ -405,7 +405,7 @@ def secondresult():
     "Inputs": {
         "input1": {
         "ColumnNames": [
-            "Date",
+            # "Date",
             "Open",
             "High",
             "Low",
@@ -416,7 +416,7 @@ def secondresult():
             "T+30_Close"],
         "Values": [
             [
-                str(date_1),
+                # str(date_1),
                 open_t,
                 high_t,
                 low_t,
@@ -424,7 +424,7 @@ def secondresult():
                 adjclose_t,
                 volume_t,
                 t_1_closediff,
-                "2"]
+                "0"]
             ]
         }
     },
@@ -434,8 +434,8 @@ def secondresult():
             # Serialize the input data into json string
             body = str.encode(json.dumps(data))
 
-            VFH_ML_KEY=os.environ.get('API_KEY', "Vhn2qxUWhxiL6LNuXfxnzQdpkzP/aiLuTFFQbUIvBh3banh76IrzKPMexJ5YuB0yXFL7tJI61uhBR2RIPvDPSA==")
-            VFH_URL = os.environ.get('URL', "https://ussouthcentral.services.azureml.net/workspaces/1ebda07f5b83468fa934325b157c5759/services/c46da9cb3adb47e5be306c388a9533ce/execute?api-version=2.0&details=true")
+            VFH_ML_KEY=os.environ.get('API_KEY', "8FErDr2F8XnmhbR0XscVKYRpgAC4R7E7yR9cIFyCAzpZavP0a1FaWQ9AV9qBvw7SYc8pNc7CfU9rS2oSI5AIgg==")
+            VFH_URL = os.environ.get('URL', "https://ussouthcentral.services.azureml.net/workspaces/1ebda07f5b83468fa934325b157c5759/services/171d5eadacbb47b5ab0811ef139f692b/execute?api-version=2.0&details=true")
             # Deployment environment variables defined on Azure (pull in with os.environ)
 
             # Construct the HTTP request header
@@ -445,26 +445,26 @@ def secondresult():
     # str.encode
             # Formulate the request
             #req = urllib.request.Request(URL, body, HEADERS)
-            #req = urllib.request.Request(VFH_URL, body, HEADERS)
             
+            req = urllib.request.Request(VFH_URL, body, HEADERS)
             # Send this request to the AML service and render the results on page
             try:
-               # response = requests.post(URL, headers=HEADERS, data=body)
-                req = urllib.request.Request(VFH_URL, body, HEADERS)
+               # response = requests.post(VFH_URL, headers=HEADERS, data=body)
+                
                 response = urllib.request.urlopen(req)
                 #print(response)
                 respdata = response.read()
-                print(respdata)
-                #result = json.loads(str(respdata, 'utf-8'))
-                #result = do_something_pretty(result)
+                #print(respdata)
+                result = json.loads(str(respdata, 'utf-8'))
+                result = do_something_pretty(result)
                 
-                #result = json.dumps(result, indent=4, sort_keys=True)
+                result = json.dumps(result, indent=4, sort_keys=True)
             
                 return render_template (
                     'final_result.html',
                     title= 'The following prediction was made for the return of your portfolio:',
                     #result=result
-                    result=respdata,
+                    result=result,
                 )
         # An HTTP error
             except urllib.error.HTTPError as err:
@@ -563,7 +563,7 @@ def do_something_pretty(jsondata):
     # Build a placeholder for the cluster#,distance values
     #repstr = '<tr><td>%d</td><td>%s</td></tr>' * (valuelen-1)
     # print(repstr)
-    output_bayesian=f'Our linear regression model would predict a closing value of {str(scored_label)} USD for the 30th trading day following'
+    output_bayesian=f'Our linear regression model would predict a closing value of {str(round(float(scored_label),2))} USD for the 30th trading day following'
     # Build the entire html table for the results data representation
     #tablestr = 'Cluster assignment: %s<br><br><table border="1"><tr><th>Cluster</th><th>Distance From Center</th></tr>'+ repstr + "</table>"
     #return tablestr % data
