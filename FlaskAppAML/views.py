@@ -164,53 +164,31 @@ def home():
         ytd_return = response_json_etf2['defaultKeyStatistics']['ytdReturn']['fmt']
         topholdings = response_json_etf2['topHoldings']['sectorWeightings']
         longbusinesssum = response_json_etf2['assetProfile']['longBusinessSummary']
-        #unpack Top Holdings 
-       # percentage by industry variables
-        realestateholdings_pct = topholdings[0]['realestate']['fmt']
-        consumer_cyclical_pct = topholdings[1]['consumer_cyclical']['fmt']
-        basic_materials_pct = topholdings[2]['basic_materials']['fmt']
-        consumer_defensive_pct = topholdings[3]['consumer_defensive']['fmt']
-        technology_pct = topholdings[4]['technology']['fmt']
-        communication_services_pct = topholdings[5]['communication_services']['fmt']
-        financial_services_pct = topholdings[6]['financial_services']['fmt']
-        utilities_pct = topholdings[7]['utilities']['fmt']
-        industrials_pct = topholdings[8]['industrials']['fmt']
-        energy_pct = topholdings[9]['energy']['fmt']
-        healthcare_pct = topholdings[10]['healthcare']['fmt']
-        #list to hold percent holdings
-        holdings_list = [realestateholdings_pct, consumer_cyclical_pct, basic_materials_pct, consumer_defensive_pct, technology_pct, communication_services_pct, financial_services_pct, utilities_pct, industrials_pct, energy_pct, healthcare_pct]
-        #list to hold sector classifications
-        holdings_categories = ['Real Estate', 'Consumer Cyclical', 'Basic Materials', 'Consumer Defensive', 'Technology', 'Communication Services', 'Financial Services', 'Utilities', 'Industrials', 'Energy', 'Healthcare']
        
         #AGG information
         three_yr_agg = response_agg['defaultKeyStatistics']['threeYearAverageReturn']['fmt']
         five_yr_agg = response_agg['defaultKeyStatistics']['fiveYearAverageReturn']['fmt']
         ytd_return_agg = response_agg['defaultKeyStatistics']['ytdReturn']['fmt']
-        topholdings_agg = response_agg['topHoldings']['sectorWeightings']
+        #topholdings_agg = response_agg['topHoldings']['sectorWeightings']
         longbusinesssum_agg = response_agg['assetProfile']['longBusinessSummary']
         bondratings_bonds_agg = response_agg['topHoldings']['bondRatings']
-        # unpack bond ratings
-        aaa_ratings = bondratings_bonds_agg[2]['aaa']['fmt']
-        aa_ratings = bondratings_bonds_agg[1]['aa']['fmt']
-        a_ratings = bondratings_bonds_agg[3]['a']['fmt']
-        bbb_ratings = bondratings_bonds_agg[6]['bbb']['fmt']
-        bondholdings= [aaa_ratings,aa_ratings,a_ratings,bbb_ratings]
-        bond_holdings_categories = ['AAA','AA','A','BBB']
+   
         
-        global etf_holdings_categories, three_yr_G, five_yr_G, ytd_return_G, topholdings_G,longbusinesssum_G, bondratings_bonds_G, three_yr_agg_G, five_yr_agg_G, ytd_return_agg_G, topholdings_agg_G, longbusinesssum_agg_G
-
+        # global etf_holdings_categories, three_yr_G, five_yr_G, ytd_return_G, topholdings_G,longbusinesssum_G, bondratings_bonds_G, three_yr_agg_G, five_yr_agg_G, ytd_return_agg_G, topholdings_agg_G, longbusinesssum_agg_G
+        global three_yr_G, five_yr_G, ytd_return_G, topholdings_G,longbusinesssum_G, bondratings_bonds_G, three_yr_agg_G, five_yr_agg_G, ytd_return_agg_G, topholdings_agg_G, longbusinesssum_agg_G
+        
         three_yr_G = three_yr
         five_yr_G = five_yr
         ytd_return_G = ytd_return
-        topholdings_G = holdings_list
+        topholdings_G = topholdings
         longbusinesssum_G = longbusinesssum
-        bondratings_bonds_G = bondholdings
+        bondratings_bonds_G = bondratings_bonds_agg
         three_yr_agg_G = three_yr_agg
         five_yr_agg_G = five_yr_agg
         ytd_return_agg_G = ytd_return_agg
-        topholdings_agg_G = bond_holdings_categories
+        #topholdings_agg_G = topholdings_agg
         longbusinesssum_agg_G = longbusinesssum_agg
-        etf_holdings_categories = holdings_categories
+        
         
 
         # Send this request to the AML service and render the results on page
@@ -261,6 +239,8 @@ def secondresult():
     datetime_1 = datetime.now()
     date_1 = date.today()
     
+    weights_chosen = [etf_weight,bond_weight,energy_weight,tech_weight,util_weight,fin_weight,health_weight,constap_weight,condisc_weight]
+    tickers_chosen = [energy_tick,tech_tick,util_tick,fin_tick,health_tick,constap_tick,condisc_tick]
     #timestamp conversion from user-submitted date
     timestamp_t = str(int(datetime.strptime(str(date_1) , '%Y-%m-%d').timestamp()))
 
@@ -492,23 +472,41 @@ def secondresult():
             for i in result_list:
                 if i[0] == current_etf_global:
                     result = i[1]
-                   
-                
- 
+
+            a = 0
+            for i in weights_chosen:
+                a += i 
+                if a > 100: 
+                    answer = "Your portfolio is overweighted (greater than 100). Please re-adjust on the previous pane."
+                answer = "Congratulations! Your portfolio equates 100%, and your weights are the following:"
+
+            if sum(weights_chosen[:1]) > 50: 
+                risk_portfolio = "Low Risk and Safer Growth"
+            elif sum(weights_chosen[:1]) > 25: 
+                risk_portfolio = "Medium Risk and Higher Growth Potential"
+            else: 
+                risk_portfolio = "High Risk and Aggressive Growth/Loss Potential"
+
             return render_template (
                 'final_result.html',
                 title= 'The following prediction was made for the return of your portfolio:',
                 result=result,
                 etfg = current_etf_global,
-                agg_result = result_list[8][1]
-                # vfh_result =result_list[0],
-                # vgt_result = result_list[1],
-                # ylco_result = result_list[2],
-                # ihi_result = result_list[3],
-                # ieo_result = result_list[4],
-                # vdc_result = result_list[5],
-                # dbc_result = result_list[6],
-                # frel_result = result_list[7],   
+                agg_result = result_list[8][1],
+                energyt = tickers_chosen[0],
+                techt = tickers_chosen[1],
+                utilt = tickers_chosen[2],
+                fint = tickers_chosen[3],
+                healtht = tickers_chosen[4],
+                constapt = tickers_chosen[5],
+                condisct = tickers_chosen[6],
+                answer = answer,
+                risk_answer = risk_portfolio,
+                etf_lbs = str(weights_chosen[0]) + str('%'),
+                bonds_lbs = str(weights_chosen[1]) + str('%'),
+                stock_lbs = str(sum(weights_chosen[2:])) + str('%'),
+                
+  
             )
     # An HTTP error
         except urllib.error.HTTPError as err:
@@ -533,15 +531,25 @@ def secondresult():
                 tyagg_g = three_yr_agg_G, 
                 fyagg_g = five_yr_agg_G,
                 yragg_g = ytd_return_agg_G,
-               thagg_g = topholdings_agg_G, 
-               # thagg_g = "topholdings",
+             
                 lbsagg_g = longbusinesssum_agg_G, 
-                thc = etf_holdings_categories,
-                thg = topholdings_G,
-                bragg_g = bondratings_bonds_G, 
-                # thc = "etf_holdings_categories",
-                # thg = "topholdings_G",
-                # bragg_g = "bondratings_bonds_G", 
+           
+                #  th_realestate = topholdings_G[0]['realestate']['fmt'],
+                #  th_consumer = topholdings_G[1]['realestate']['fmt'],
+                #  th_basic = topholdings_G[2]['realestate']['fmt'],
+                #  th_consumerdef = topholdings_G[3]['realestate']['fmt'],
+                #  th_tech = topholdings_G[4]['realestate']['fmt'],
+                #  th_communication = topholdings_G[5]['realestate']['fmt'],
+                #  th_financial = topholdings_G[6]['realestate']['fmt'],
+                #  th_utilities = topholdings_G[7]['realestate']['fmt'],
+                #  th_industrials = topholdings_G[8]['realestate']['fmt'],
+                #  th_energy = topholdings_G[9]['realestate']['fmt'],
+                #  th_health = topholdings_G[10]['realestate']['fmt'],
+                # aaa_ratings = bondratings_bonds_G[2]['aaa']['fmt'],
+                # aa_ratings = bondratings_bonds_G[1]['aa']['fmt'],
+                # a_ratings = bondratings_bonds_G[3]['a']['fmt'],
+                # bbb_ratings = bondratings_bonds_G[6]['bbb']['fmt'],
+
                 #iframe = 'https://www.nasdaq.com/market-activity/stocks'
 
                 )
