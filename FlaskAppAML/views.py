@@ -162,7 +162,7 @@ def home():
         three_yr = response_json_etf2['defaultKeyStatistics']['threeYearAverageReturn']['fmt']
         five_yr = response_json_etf2['defaultKeyStatistics']['fiveYearAverageReturn']['fmt']
         ytd_return = response_json_etf2['defaultKeyStatistics']['ytdReturn']['fmt']
-        topholdings = response_json_etf2['topHoldings']['sectorWeightings']
+        # topholdings = response_json_etf2['topHoldings']['sectorWeightings']
         longbusinesssum = response_json_etf2['assetProfile']['longBusinessSummary']
        
         #AGG information
@@ -170,8 +170,8 @@ def home():
         five_yr_agg = response_agg['defaultKeyStatistics']['fiveYearAverageReturn']['fmt']
         ytd_return_agg = response_agg['defaultKeyStatistics']['ytdReturn']['fmt']
         
-        longbusinesssum_agg = response_agg['assetProfile']['longBusinessSummary']
-        bondratings_bonds_agg = response_agg['topHoldings']['bondRatings']
+        # longbusinesssum_agg = response_agg['assetProfile']['longBusinessSummary']
+        # bondratings_bonds_agg = response_agg['topHoldings']['bondRatings']
    
         
         global three_yr_G, five_yr_G, ytd_return_G, topholdings_G,longbusinesssum_G, bondratings_bonds_G, three_yr_agg_G, five_yr_agg_G, ytd_return_agg_G, topholdings_agg_G, longbusinesssum_agg_G
@@ -179,9 +179,9 @@ def home():
         three_yr_G = three_yr
         five_yr_G = five_yr
         ytd_return_G = ytd_return
-        topholdings_G = topholdings
+        # topholdings_G = topholdings
         longbusinesssum_G = longbusinesssum
-        bondratings_bonds_G = bondratings_bonds_agg
+        # bondratings_bonds_G = bondratings_bonds_agg
         three_yr_agg_G = three_yr_agg
         five_yr_agg_G = five_yr_agg
         ytd_return_agg_G = ytd_return_agg
@@ -536,7 +536,7 @@ def secondresult():
                 yragg_g = ytd_return_agg_G,
              
                 lbsagg_g = longbusinesssum_agg_G, 
-                thg = topholdings_G,
+                # thg = topholdings_G,
 
                 # th_realestate = topholdings_G[0]['realestate']['fmt'],
                 # th_consumer = topholdings_G[1]['consumer_cyclical']['fmt'],
