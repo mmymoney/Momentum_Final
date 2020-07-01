@@ -169,12 +169,11 @@ def home():
         three_yr_agg = response_agg['defaultKeyStatistics']['threeYearAverageReturn']['fmt']
         five_yr_agg = response_agg['defaultKeyStatistics']['fiveYearAverageReturn']['fmt']
         ytd_return_agg = response_agg['defaultKeyStatistics']['ytdReturn']['fmt']
-        #topholdings_agg = response_agg['topHoldings']['sectorWeightings']
+        
         longbusinesssum_agg = response_agg['assetProfile']['longBusinessSummary']
         bondratings_bonds_agg = response_agg['topHoldings']['bondRatings']
    
         
-        # global etf_holdings_categories, three_yr_G, five_yr_G, ytd_return_G, topholdings_G,longbusinesssum_G, bondratings_bonds_G, three_yr_agg_G, five_yr_agg_G, ytd_return_agg_G, topholdings_agg_G, longbusinesssum_agg_G
         global three_yr_G, five_yr_G, ytd_return_G, topholdings_G,longbusinesssum_G, bondratings_bonds_G, three_yr_agg_G, five_yr_agg_G, ytd_return_agg_G, topholdings_agg_G, longbusinesssum_agg_G
         
         three_yr_G = three_yr
@@ -186,7 +185,6 @@ def home():
         three_yr_agg_G = three_yr_agg
         five_yr_agg_G = five_yr_agg
         ytd_return_agg_G = ytd_return_agg
-        #topholdings_agg_G = topholdings_agg
         longbusinesssum_agg_G = longbusinesssum_agg
         
         
@@ -276,6 +274,8 @@ def secondresult():
         single_etf.extend((open_t, high_t, low_t, close_t, adjclose_t, volume_t, t_1_closediff))
         etf_attr_list.append(single_etf)
 
+        global closing_price
+        closing_price = close_t
 
     if request.method == 'POST':
         # Plug in the data into a dictionary object 
@@ -478,7 +478,10 @@ def secondresult():
                 a += i 
                 if a > 100: 
                     answer = "Your portfolio is overweighted (greater than 100). Please re-adjust on the previous pane."
-                answer = "Congratulations! Your portfolio equates 100%, and your weights are the following:"
+                elif a < 100:
+                    answer = "Your portfolio is does not add up to 100%. Please return to the previous pane and re-weight if you so wish."
+                else: 
+                    answer = "Congratulations! Your portfolio equates 100%, and your weights are the following:"
 
             if sum(weights_chosen[:1]) > 50: 
                 risk_portfolio = "Low Risk and Safer Growth"
@@ -505,7 +508,7 @@ def secondresult():
                 etf_lbs = str(weights_chosen[0]) + str('%'),
                 bonds_lbs = str(weights_chosen[1]) + str('%'),
                 stock_lbs = str(sum(weights_chosen[2:])) + str('%'),
-                
+                close = closing_price
   
             )
     # An HTTP error
@@ -533,22 +536,24 @@ def secondresult():
                 yragg_g = ytd_return_agg_G,
              
                 lbsagg_g = longbusinesssum_agg_G, 
-           
-                #  th_realestate = topholdings_G[0]['realestate']['fmt'],
-                #  th_consumer = topholdings_G[1]['realestate']['fmt'],
-                #  th_basic = topholdings_G[2]['realestate']['fmt'],
-                #  th_consumerdef = topholdings_G[3]['realestate']['fmt'],
-                #  th_tech = topholdings_G[4]['realestate']['fmt'],
-                #  th_communication = topholdings_G[5]['realestate']['fmt'],
-                #  th_financial = topholdings_G[6]['realestate']['fmt'],
-                #  th_utilities = topholdings_G[7]['realestate']['fmt'],
-                #  th_industrials = topholdings_G[8]['realestate']['fmt'],
-                #  th_energy = topholdings_G[9]['realestate']['fmt'],
-                #  th_health = topholdings_G[10]['realestate']['fmt'],
-                # aaa_ratings = bondratings_bonds_G[2]['aaa']['fmt'],
-                # aa_ratings = bondratings_bonds_G[1]['aa']['fmt'],
-                # a_ratings = bondratings_bonds_G[3]['a']['fmt'],
-                # bbb_ratings = bondratings_bonds_G[6]['bbb']['fmt'],
+                thg = topholdings_G,
+
+                th_realestate = topholdings_G[0]['realestate']['fmt'],
+                th_consumer = topholdings_G[1]['consumer_cyclical']['fmt'],
+                th_basic = topholdings_G[2]['basic_materials']['fmt'],
+                th_consumerdef = topholdings_G[3]['consumer_defensive']['fmt'],
+                th_tech = topholdings_G[4]['technology']['fmt'],
+                th_communication = topholdings_G[5]['communication_services']['fmt'],
+                th_financial = topholdings_G[6]['financial_services']['fmt'],
+                th_utilities = topholdings_G[7]['utilities']['fmt'],
+                th_industrials = topholdings_G[8]['industrials']['fmt'],
+                th_energy = topholdings_G[9]['energy']['fmt'],
+                th_health = topholdings_G[10]['healthcare']['fmt'],
+                aaa_ratings = bondratings_bonds_G[2]['aaa']['fmt'],
+                aa_ratings = bondratings_bonds_G[1]['aa']['fmt'],
+                a_ratings = bondratings_bonds_G[3]['a']['fmt'],
+                bbb_ratings = bondratings_bonds_G[6]['bbb']['fmt'],
+
 
                 #iframe = 'https://www.nasdaq.com/market-activity/stocks'
 
@@ -620,7 +625,7 @@ def do_something_pretty(jsondata):
     # Build a placeholder for the cluster#,distance values
     #repstr = '<tr><td>%d</td><td>%s</td></tr>' * (valuelen-1)
     # print(repstr)
-    output_bayesian=f'Our linear regression model would predict a closing value of {str(round(float(scored_label),2))} USD for the 30th trading day following'
+    output_bayesian=f'Our machine learning model predicted a closing value of {str(round(float(scored_label),2))} USD for the 30th trading day following {date.today()}.'
     # Build the entire html table for the results data representation
     #tablestr = 'Cluster assignment: %s<br><br><table border="1"><tr><th>Cluster</th><th>Distance From Center</th></tr>'+ repstr + "</table>"
     #return tablestr % data

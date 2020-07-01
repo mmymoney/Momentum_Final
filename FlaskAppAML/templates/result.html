@@ -12,7 +12,7 @@
     <h4>Congratulations! Based upon your interests and who you are, the following portfolio has been created and tailored for you. 
         Of course, as this is yours, not all equities have been picked as some we would like to leave up to you! The rule is simple: Each equity is given a percentage weight, analogous to a slice of pie. 
     Your complete portfolio is 100% and we leave it up to you to decide the fraction of that 100% percent you would like each equity to be.
-    <br><br> Toggle the buttons for more information on equity before deciding. Your complete portfolio should be made up of 3 to 5 equities, and 2 equities have already been chosen for you.
+    <br><br> Toggle the buttons for more information on equity before deciding. Your complete portfolio should be made up of 9 tradeable equities, and 2 equities have already been chosen for you (the ETF below and the AGG Bond ETF).
     <br> Choose well, and we'll catch you on the next pane.</h4><br /><br />
 
     <div class="container">
@@ -23,7 +23,7 @@
         <div id="etf" class="collapse">
           {{etf_content}}<br><br>
           The 3 year ETF return is {{tyg}} and the 5 year return for {{etfg}} is {{fyg}}. The year to date return is {{yrg}}.
-          <!-- <br> The {{etfg}} top holdings are:<br>
+          <br> The {{etfg}} top holdings are:<br>
           Real Estate {{th_realestate}}<br>
            Consumer Cyclical Goods {{th_consumer}}<br>
           Basic Consumer Goods {{th_basic}}<br>
@@ -34,7 +34,7 @@
           Utilities {{th_utilities}}<br>
           Industrials {{th_industrials}}<br>
           Energy {{th_energy}}<br>
-          Health {{th_health}}<br> -->
+          Health {{th_health}}<br>
           <br><b>Note: If values are 0% or seem inaccurate to you please refer to external soure for additional verification. </b> 
            
           <br><a href="https://www.ssga.com/us/en/intermediary/etfs/fund-finder">Visit SSGA for more ETF information (click here)</a>
@@ -47,17 +47,17 @@
         <div id="agg" class="collapse">
             {{lbsagg_g}}<br><br>
           The 3 year AGG return is {{tyagg_g}} and the 5 year return for AGG is {{fyagg_g}}. The year to date return is {{yragg_g}}.
-          <!-- <br> The top holdings and weights are: 
+          <br> The top holdings and weights are: 
           <br> AAA Rated Bonds {{aaa_ratings}}
           <br> AA Rated Bonds {{aa_ratings}}
           <br> A Rated Bonds {{a_ratings}}
-          <br> BBB Rated Bonds {{bbb_ratings}} -->
+          <br> BBB Rated Bonds {{bbb_ratings}}
           <b>If any of these value appear inaccurate to you, please refer to external source for additional validation.</b>
         <br><a href="https://www.ssga.com/us/en/intermediary/etfs/fund-finder">Visit SSGA for more ETF information (click here)</a>
         </div>
 
         <h2>Stock Weightings</h2>
-        <!-- <p>Click on the button to see additional information.</p> -->
+        
         <br>Chosen Energy Company (Ticker): {{form.energy_ticker}}
          and corresponding weighting chosen is: {{form.energy_weighting}}<br>
 
