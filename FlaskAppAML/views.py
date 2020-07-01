@@ -170,7 +170,7 @@ def home():
         five_yr_agg = response_agg['defaultKeyStatistics']['fiveYearAverageReturn']['fmt']
         ytd_return_agg = response_agg['defaultKeyStatistics']['ytdReturn']['fmt']
         
-        longbusinesssum_agg = response_agg['assetProfile']['longBusinessSummary']
+        # longbusinesssum_agg = response_agg['assetProfile']['longBusinessSummary']
         # bondratings_bonds_agg = response_agg['topHoldings']['bondRatings']
    
         
@@ -185,7 +185,7 @@ def home():
         three_yr_agg_G = three_yr_agg
         five_yr_agg_G = five_yr_agg
         ytd_return_agg_G = ytd_return_agg
-        longbusinesssum_agg_G = longbusinesssum_agg
+        # longbusinesssum_agg_G = longbusinesssum_agg
         
         
 
@@ -535,7 +535,7 @@ def secondresult():
                 fyagg_g = five_yr_agg_G,
                 yragg_g = ytd_return_agg_G,
              
-                lbsagg_g = longbusinesssum_agg_G, 
+                # lbsagg_g = longbusinesssum_agg_G, 
                 # thg = topholdings_G,
 
                 # th_realestate = topholdings_G[0]['realestate']['fmt'],
