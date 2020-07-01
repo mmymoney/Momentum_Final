@@ -170,7 +170,7 @@ def home():
         five_yr_agg = response_agg['defaultKeyStatistics']['fiveYearAverageReturn']['fmt']
         ytd_return_agg = response_agg['defaultKeyStatistics']['ytdReturn']['fmt']
         
-        # longbusinesssum_agg = response_agg['assetProfile']['longBusinessSummary']
+        longbusinesssum_agg = response_agg['assetProfile']['longBusinessSummary']
         # bondratings_bonds_agg = response_agg['topHoldings']['bondRatings']
    
         
