@@ -174,17 +174,17 @@ def home():
         # bondratings_bonds_agg = response_agg['topHoldings']['bondRatings']
    
         
-        global three_yr_G, five_yr_G, ytd_return_G, topholdings_G,longbusinesssum_G, bondratings_bonds_G, three_yr_agg_G, five_yr_agg_G, ytd_return_agg_G, topholdings_agg_G, longbusinesssum_agg_G
+        # global three_yr_G, five_yr_G, ytd_return_G, topholdings_G,longbusinesssum_G, bondratings_bonds_G, three_yr_agg_G, five_yr_agg_G, ytd_return_agg_G, topholdings_agg_G, longbusinesssum_agg_G
         
-        three_yr_G = three_yr
-        five_yr_G = five_yr
-        ytd_return_G = ytd_return
+        # three_yr_G = three_yr
+        # five_yr_G = five_yr
+        # ytd_return_G = ytd_return
         # topholdings_G = topholdings
-        longbusinesssum_G = longbusinesssum
+        # longbusinesssum_G = longbusinesssum
         # bondratings_bonds_G = bondratings_bonds_agg
-        three_yr_agg_G = three_yr_agg
-        five_yr_agg_G = five_yr_agg
-        ytd_return_agg_G = ytd_return_agg
+        # three_yr_agg_G = three_yr_agg
+        # five_yr_agg_G = five_yr_agg
+        # ytd_return_agg_G = ytd_return_agg
         # longbusinesssum_agg_G = longbusinesssum_agg
         
         
@@ -526,14 +526,14 @@ def secondresult():
                 'result.html',
                 form=form,
                 title="Your portfolio:",
-                etf_content = longbusinesssum_G,
-                etfg = current_etf_global,
-                tyg = three_yr_G,
-                fyg = five_yr_G,
-                yrg = ytd_return_G,
-                tyagg_g = three_yr_agg_G, 
-                fyagg_g = five_yr_agg_G,
-                yragg_g = ytd_return_agg_G,
+                # etf_content = longbusinesssum_G,
+                # etfg = current_etf_global,
+                # tyg = three_yr_G,
+                # fyg = five_yr_G,
+                # yrg = ytd_return_G,
+                # tyagg_g = three_yr_agg_G, 
+                # fyagg_g = five_yr_agg_G,
+                # yragg_g = ytd_return_agg_G,
              
                 # lbsagg_g = longbusinesssum_agg_G, 
                 # thg = topholdings_G,
