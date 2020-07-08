@@ -524,7 +524,7 @@ def secondresult():
         
     return render_template(
                 'result.html',
-                form=form,
+                # form=form,
                 # title="Your portfolio:",
                 # etf_content = longbusinesssum_G,
                 # etfg = current_etf_global,
